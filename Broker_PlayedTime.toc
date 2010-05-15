@@ -1,0 +1,20 @@
+## Interface: 30300
+## Version: 3.3.3.wowi:revision
+
+## Title: Broker PlayedTime
+## Notes: DataBroker plugin to track played time across all your characters.
+## Author: Phanx
+## X-Email: addons@phanx.net
+## X-Copyright: Copyright © 2010 Alyssa "Phanx" Kinley
+## X-License: Do not redistribute. See README for full license terms.
+## X-Website: http://www.wowinterface.com/downloads/info16711-BrokerPlayedTime.html
+## X-WoWI-ID: 16711
+
+## OptionalDependencies: LibDataBroker-1.1
+## SavedVariables: BrokerPlayedTimeDB
+
+Libs\LibStub.lua
+Libs\CallbackHandler-1.0.lua
+Libs\LibDataBroker-1.1.lua
+
+Broker_PlayedTime.lua
