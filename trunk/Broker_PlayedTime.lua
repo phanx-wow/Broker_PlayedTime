@@ -122,6 +122,7 @@ function BrokerPlayedTime:PLAYER_LOGIN()
 			end
 		end
 	end
+
 	table.sort(sortedRealms, function(a, b)
 		if a == currentRealm then
 			return true
@@ -151,9 +152,19 @@ function BrokerPlayedTime:PLAYER_LOGIN()
 	self:UpdateTimePlayed()
 end
 
+local requesting
+
+local o = ChatFrame_DisplayTimePlayed
+ChatFrame_DisplayTimePlayed = function(...)
+	if requesting then
+		requesting = false
+		return
+	end
+	return o(...)
+end
+
 function BrokerPlayedTime:UpdateTimePlayed()
-	-- TODO:
-	-- suppress chat message ?
+	requesting = true
 	RequestTimePlayed()
 end
 
@@ -163,7 +174,11 @@ function BrokerPlayedTime:SaveTimePlayed()
 	myDB.timeUpdated = now
 end
 
-BrokerPlayedTime.PLAYER_LEVEL_UP       = BrokerPlayedTime.SaveTimePlayed
+function BrokerPlayedTime:PLAYER_LEVEL_UP(level)
+	myDB.level = level or UnitLevel("player")
+	self:SaveTimePlayed()
+end
+
 BrokerPlayedTime.PLAYER_REGEN_ENABLED  = BrokerPlayedTime.SaveTimePlayed
 BrokerPlayedTime.PLAYER_UPDATE_RESTING = BrokerPlayedTime.SaveTimePlayed
 
