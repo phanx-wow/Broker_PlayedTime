@@ -10,7 +10,7 @@
 --  option to show seconds in tooltip ?
 --  option to show all realms or just current realm ?
 
-local L = setmetatable({}, {
+local L = setmetatable({ }, {
 	__index = function(t, s)
 		if s then
 			t[s] = tostring(s)
@@ -23,8 +23,8 @@ local db
 local myDB
 
 local sortedFactions = { "Horde", "Alliance" }
-local sortedPlayers = {}
-local sortedRealms = {}
+local sortedPlayers = { }
+local sortedRealms = { }
 
 local currentFaction = UnitFactionGroup("player")
 local currentPlayer = UnitName("player")
@@ -40,21 +40,14 @@ local factionIcons = {
 	Alliance = "|TInterface\\AddOns\\Broker_PlayedTime\\Faction-Alliance:0|t ",
 }
 
-local classIcons = {
-	DEATHKNIGHT = "|TInterface\\Icons\\Spell_Deathknight_ClassIcon:0|t ",
-	DRUID = "|TInterface\\Icons\\INV_Misc_MonsterClaw_04:0|t ",
-	HUNTER = "|TInterface\\Icons\\INV_Weapon_Bow_07:0|t ",
-	MAGE = "|TInterface\\Icons\\INV_Staff_13:0|t ",
-	PRIEST = "|TInterface\\Icons\\INV_Staff_30:0|t ",
-	PALADIN = "|TInterface\\AddOns\\Broker_PlayedTime\\Class-Paladin:0|t ",
-	ROGUE = "|TInterface\\AddOns\\Broker_PlayedTime\\Class-Rogue:0|t ",
-	SHAMAN = "|TInterface\\Icons\\Spell_Nature_BloodLust:0|t ",
-	WARRIOR = "|TInterface\\Icons\\INV_Sword_27:0|t ",
-	WARLOCK = "|TInterface\\Icons\\Spell_Nature_FaerieFire:0|t ",
-}
+local classIcons = { }
+for class, t in pairs(CLASS_BUTTONS) do
+	local offset, left, right, bottom, top = 0.025, unpack(t)
+	classIcons[class] = string.format("|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:16:16:0:0:256:256:%s:%s:%s:%s|t ", (left + offset) * 256, (right - offset) * 256, (bottom + offset) * 256, (top - offset) * 256)
+end
 
 local GRAY = "cccccc"
-local CLASS_COLORS = {}
+local CLASS_COLORS = { }
 for k, v in pairs(RAID_CLASS_COLORS) do
 	CLASS_COLORS[k] = ("|cff%02x%02x%02x"):format(v.r * 255, v.g * 255, v.b * 255)
 end
