@@ -1,5 +1,5 @@
 ## Interface: 30300
-## Version: 3.3.3.wowi:revision
+## Version: 3.3.5.wowi:revision
 
 ## Title: Broker PlayedTime
 ## Notes: DataBroker plugin to track played time across all your characters.
