@@ -5,7 +5,7 @@
 ## Notes: DataBroker plugin to track played time across all your characters.
 ## Author: Phanx
 ## X-Email: addons@phanx.net
-## X-Copyright: Copyright © 2010 Alyssa "Phanx" Kinley
+## X-Copyright: Copyright © 2010 Phanx.
 ## X-License: Do not redistribute. See README for full license terms.
 ## X-Website: http://www.wowinterface.com/downloads/info16711-BrokerPlayedTime.html
 ## X-WoWI-ID: 16711
