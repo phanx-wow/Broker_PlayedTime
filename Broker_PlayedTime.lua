@@ -2,13 +2,10 @@
 	Broker_PlayedTime
 	Tracks played time for all your characters.
 	by Phanx < addons@phanx.net >
-	Copyright © 2010 Alyssa "Phanx" Kinley
+	Copyright © 2010 Phanx
 	http://www.wowinterface.com/downloads/info-BrokerPlayedTime.html
 	http://wow.curse.com/downloads/wow-addons/details/broker-playedtime.aspx
 ----------------------------------------------------------------------]]
---  TODO:
---  option to show seconds in tooltip ?
---  option to show all realms or just current realm ?
 
 local L = setmetatable({ }, {
 	__index = function(t, s)
@@ -185,6 +182,11 @@ BrokerPlayedTime.dataObject = LibStub("LibDataBroker-1.1"):NewDataObject("Played
 	type = "data source",
 	icon = "Interface\\Icons\\Spell_Nature_TimeStop", -- factionIcons[currentFaction],
 	text = "Played Time",
+	OnClick = function(self, button)
+		if button == "RightButton" then
+			InterfaceOptionsFrame_OpenToCategory(BrokerPlayedTime.optionsPanel)
+		end
+	end,
 	OnTooltipShow = function(tt)
 		local total = 0
 		tt:AddLine("Time Played")
@@ -294,9 +296,3 @@ BrokerPlayedTime.optionsPanel:SetScript("OnShow", function(self)
 	self:SetScript("OnShow", nil)
 end)
 InterfaceOptions_AddCategory(BrokerPlayedTime.optionsPanel)
-
-BrokerPlayedTime.dataObject.OnClick = function(self, button)
-	if button == "RightButton" then
-		InterfaceOptionsFrame_OpenToCategory(BrokerPlayedTime.optionsPanel)
-	end
-end
