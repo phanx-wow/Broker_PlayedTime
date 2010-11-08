@@ -8,7 +8,7 @@
 ## X-Copyright: Copyright © 2010 Phanx
 ## X-License: Do Not Redistribute. See LICENSE for details.
 ## X-Website: http://www.wowinterface.com/downloads/info16711-BrokerPlayedTime.html
-## X-Curse-ProjectName: broker-playedtime
+## X-Curse-Project-ID: broker-playedtime
 ## X-WoWI-ID: 16711
 
 ## OptionalDependencies: LibDataBroker-1.1
