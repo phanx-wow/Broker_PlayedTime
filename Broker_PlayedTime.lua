@@ -2,7 +2,7 @@
 	Broker_PlayedTime
 	Tracks played time for all your characters.
 	by Phanx < addons@phanx.net >
-	Copyright © 2010 Phanx
+	Copyright © 2010 Phanx. Some rights reserved. See LICENSE.txt for details.
 	http://www.wowinterface.com/downloads/info-BrokerPlayedTime.html
 	http://wow.curse.com/downloads/wow-addons/details/broker-playedtime.aspx
 ----------------------------------------------------------------------]]
@@ -296,3 +296,66 @@ BrokerPlayedTime.optionsPanel:SetScript("OnShow", function(self)
 	self:SetScript("OnShow", nil)
 end)
 InterfaceOptions_AddCategory(BrokerPlayedTime.optionsPanel)
+
+SLASH_BROKERPLAYEDTIME1 = "/bpt"
+
+local function Purge(realm, faction, name)
+	db[realm][faction][name] = nil
+	sortedPlayers[realm][faction][name] = nil
+
+	local n = 0
+	for k in pairs(db[realm][faction]) do
+		n = n + 1
+	end
+	if n == 0 then
+		db[realm][faction] = nil
+		sortedPlayers[realm][faction] = nil
+	end
+
+	n = 0
+	for k in pairs(db[realm]) do
+		n = n + 1
+	end
+	if n == 0 then
+		db[realm] = nil
+		sortedPlayers[realm] = nil
+		for i, v in pairs(sortedRealms) do
+			if v == realm then
+				sortedRealms[i] = nil
+				break
+			end
+		end
+	end
+end
+
+SlashCmdList.BROKERPLAYEDTIME = function(input)
+	local command, name, realm = input:trim():match("^(%S+) (%S+) ?(.*)$")
+
+	if not command or not command:match("^[dr]e[lm]") then
+		return print("Usage: /bpt delete Name")
+	end
+
+	if realm then
+		if db[realm] then
+			for faction in pairs(db[realm]) do
+				if db[realm][faction][name] then
+					Purge(realm, faction, name)
+					return print("Character", name, "of", realm, "successfully purged.")
+				else
+					return print("Character", name, "of", realm, "not found.")
+				end
+			end
+		end
+		return print("Realm", realm, "not found.")
+	end
+
+	for realm in pairs(db) do
+		for faction in pairs(db[realm]) do
+			if db[realm][faction][name] then
+				Purge(realm, faction, name)
+				return print("Character", name, "of", realm, "successfully purged.")
+			end
+		end
+	end
+	return print("Character", name, "not found.")
+end

@@ -1,6 +1,7 @@
 ## Broker_PlayedTime
 
 * by Phanx < addons@phanx.net >
+* Copyright © 2010 Phanx.  Some rights reserved. See LICENSE.txt for details.
 * http://www.wowinterface.com/downloads/info-BrokerPlayedTime.html
 * http://wow.curse.com/downloads/wow-addons/details/broker-playedtime.aspx
 
@@ -38,14 +39,3 @@ or comments.
 
 If you need to contact me privately, you may do by private message
 on either download site, or by email at addons@phanx.net.
-
-
-## License
-
-Broker_PlayedTime is free as in "free beer", not free as in "free
-software", and you may not include it in your compilation or
-redistribute it in any other way without first getting permission. The
-full license text under which Broker_PlayedTime is released can be found
-in the LICENSE text file inside the addon's folder. Show your
-appreciation for the time and effort addon authors put into writing,
-updating, and supporting addons by respecting our legal rights. Thanks!
