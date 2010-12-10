@@ -6,7 +6,7 @@
 ## Author: Phanx
 ## X-Email: addons@phanx.net
 ## X-Copyright: Copyright © 2010 Phanx
-## X-License: Do Not Redistribute. See LICENSE for details.
+## X-License: Public Domain
 ## X-Website: http://www.wowinterface.com/downloads/info16711-BrokerPlayedTime.html
 ## X-Curse-Project-ID: broker-playedtime
 ## X-WoWI-ID: 16711

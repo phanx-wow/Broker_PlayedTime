@@ -42,10 +42,9 @@ on either download site, or by email at addons@phanx.net.
 
 ## License
 
-Broker_PlayedTime is free as in "free beer", not free as in "free
-software", and you may not include it in your compilation or
-redistribute it in any other way without first getting permission. The
-full license text under which Broker_PlayedTime is released can be found
-in the LICENSE text file inside the addon's folder. Show your
-appreciation for the time and effort addon authors put into writing,
-updating, and supporting addons by respecting our legal rights. Thanks!
+Copyright © 2010 Phanx
+
+I, the copyright holder of this work, hereby release it into the public
+domain. This applies worldwide. In case this is not legally possible: I
+grant anyone the right to use this work for any purpose, without any
+conditions, unless such conditions are required by law.
