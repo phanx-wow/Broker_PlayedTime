@@ -1,6 +1,7 @@
 ## Broker_PlayedTime
 
 * by Phanx < addons@phanx.net >
+* Currently maintained by Akkorian < akkorian@hotmail.com >
 * Copyright © 2010 Phanx.  Some rights reserved. See LICENSE.txt for details.
 * http://www.wowinterface.com/downloads/info-BrokerPlayedTime.html
 * http://wow.curse.com/downloads/wow-addons/details/broker-playedtime.aspx
@@ -27,8 +28,8 @@ right-clicking the plugin.
 
 Compatible with all locales.
 
-Translated into English. If you'd like to provide translations for
-another locale, post a comment on the download page.
+Translated into English, Deutsch, and Español. If can provide
+translations for another locale, send me a PM.
 
 
 ## Feedback

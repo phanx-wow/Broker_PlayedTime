@@ -2,19 +2,61 @@
 	Broker_PlayedTime
 	Tracks played time for all your characters.
 	by Phanx < addons@phanx.net >
+	Currently maintained by Akkorian < akkorian@hotmail.com >
 	Copyright © 2010 Phanx. Some rights reserved. See LICENSE.txt for details.
 	http://www.wowinterface.com/downloads/info-BrokerPlayedTime.html
 	http://wow.curse.com/downloads/wow-addons/details/broker-playedtime.aspx
 ----------------------------------------------------------------------]]
 
-local L = setmetatable({ }, {
-	__index = function(t, s)
-		if s then
-			t[s] = tostring(s)
-			return t[s]
-		end
-	end
-})
+local L = setmetatable({ }, { __index = function(t, k)
+	if k == nil then return "" end
+	local v = tostring(k)
+	t[k] = v
+	return v
+end})
+
+L["Time Played"] = TIME_PLAYED_MSG
+
+local LOCALE = GetLocale()
+if LOCALE == "deDE" then
+	L["Total"] = "Gesamt"
+	L["Show character levels"] = "Charakterstufen anzeigen"
+	L["Show class icons"] = "Klassensymbolen anzeigen"
+	L["Show faction icons"] = "Fraktionsymbolen anzeigen"
+	L["Right click to remove a character."] = "Rechtsklicken, um ein Charakter entfernen."
+elseif LOCALE == "esES" or LOCALE == "esMX" then
+	L["Total"] = "Total"
+	L["Show character levels"] = "Mostrar niveles de los personajes"
+	L["Show class icons"] = "Mostrar icono de clase"
+	L["Show faction icons"] = "Mostrar icono de facción"
+	L["Right click to remove a character."] = "Haz clic derecho para eliminar un personaje"
+elseif LOCALE == "frFR" then
+--	L["Total"] = ""
+--	L["Show character levels"] = ""
+--	L["Show class icons"] = ""
+--	L["Show faction icons"] = ""
+--	L["Right click to remove a character."] = ""
+elseif LOCALE == "ruRU" then
+--	L["Total"] = ""
+--	L["Show character levels"] = ""
+--	L["Show class icons"] = ""
+--	L["Show faction icons"] = ""
+--	L["Right click to remove a character."] = ""
+elseif LOCALE == "koKR" then
+--	L["Total"] = ""
+--	L["Show character levels"] = ""
+--	L["Show class icons"] = ""
+--	L["Show faction icons"] = ""
+--	L["Right click to remove a character."] = ""
+elseif LOCALE == "zhCN" then
+--	L["Total"] = ""
+--	L["Show character levels"] = ""
+--	L["Show class icons"] = ""
+--	L["Show faction icons"] = ""
+--	L["Right click to remove a character."] = ""
+end
+
+------------------------------------------------------------------------
 
 local db
 local myDB
@@ -49,17 +91,14 @@ for k, v in pairs(RAID_CLASS_COLORS) do
 	CLASS_COLORS[k] = ("|cff%02x%02x%02x"):format(v.r * 255, v.g * 255, v.b * 255)
 end
 
-local TIME_STRING = "|cffffffff%d|r|cffffcc00d|r |cffffffff%02d|r|cffffcc00h|r |cffffffff%02d|r|cffffcc00m|r" -- |cffffffff%02d|r|cffffcc00s|r"
 local function FormatTime(t)
 	if not t then return end
 
 	local d = floor(t / 86400)
 	local h = floor((t - (d * 86400)) / 3600)
 	local m = floor((t - (d * 86400) - (h * 3600)) / 60)
---	local s = mod(t, 60)
 
-	local text = format(TIME_STRING, d, h, m) --, s)
-	return(text)
+	return( format( "|cffffffff%d|r|cffffcc00d|r |cffffffff%02d|r|cffffcc00h|r |cffffffff%02d|r|cffffcc00m|r", d, h, m ) )
 end
 
 local BrokerPlayedTime = CreateFrame("Frame")
@@ -178,10 +217,10 @@ function BrokerPlayedTime:TIME_PLAYED_MSG(t)
 	self:SaveTimePlayed()
 end
 
-BrokerPlayedTime.dataObject = LibStub("LibDataBroker-1.1"):NewDataObject("Played Time", {
+BrokerPlayedTime.dataObject = LibStub("LibDataBroker-1.1"):NewDataObject("PlayedTime", {
 	type = "data source",
 	icon = "Interface\\Icons\\Spell_Nature_TimeStop", -- factionIcons[currentFaction],
-	text = "Played Time",
+	text = L["Time Played"],
 	OnClick = function(self, button)
 		if button == "RightButton" then
 			InterfaceOptionsFrame_OpenToCategory(BrokerPlayedTime.optionsPanel)
@@ -189,7 +228,7 @@ BrokerPlayedTime.dataObject = LibStub("LibDataBroker-1.1"):NewDataObject("Played
 	end,
 	OnTooltipShow = function(tt)
 		local total = 0
-		tt:AddLine("Time Played")
+		tt:AddLine(L["Time Played"])
 		for _, realm in ipairs(sortedRealms) do
 			tt:AddLine(" ")
 			tt:AddLine(realm)
@@ -219,7 +258,7 @@ BrokerPlayedTime.dataObject = LibStub("LibDataBroker-1.1"):NewDataObject("Played
 			end
 		end
 		tt:AddLine(" ")
-		tt:AddDoubleLine("Total", FormatTime(total))
+		tt:AddDoubleLine(L["Total"], FormatTime(total))
 	end
 })
 
@@ -297,6 +336,8 @@ BrokerPlayedTime.optionsPanel:SetScript("OnShow", function(self)
 end)
 InterfaceOptions_AddCategory(BrokerPlayedTime.optionsPanel)
 
+------------------------------------------------------------------------
+
 SLASH_BROKERPLAYEDTIME1 = "/bpt"
 
 local function Purge(realm, faction, name)
@@ -329,7 +370,7 @@ local function Purge(realm, faction, name)
 end
 
 SlashCmdList.BROKERPLAYEDTIME = function(input)
-	local command, name, realm = input:trim():match("^(%S+) (%S+) ?(.*)$")
+	local command, name, realm = input:trim():gsub("%[%]<>"):match("^(%S+) (%S+) ?(.*)$")
 
 	if not command or not command:match("^[dr]e[lm]") then
 		return print("Usage: /bpt delete Name")
@@ -340,7 +381,7 @@ SlashCmdList.BROKERPLAYEDTIME = function(input)
 			for faction in pairs(db[realm]) do
 				if db[realm][faction][name] then
 					Purge(realm, faction, name)
-					return print("Character", name, "of", realm, "successfully purged.")
+					return print("Character", name, "of", realm, "successfully removed.")
 				else
 					return print("Character", name, "of", realm, "not found.")
 				end
@@ -353,7 +394,7 @@ SlashCmdList.BROKERPLAYEDTIME = function(input)
 		for faction in pairs(db[realm]) do
 			if db[realm][faction][name] then
 				Purge(realm, faction, name)
-				return print("Character", name, "of", realm, "successfully purged.")
+				return print("Character", name, "of", realm, "successfully removed.")
 			end
 		end
 	end
