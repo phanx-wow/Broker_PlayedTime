@@ -1,6 +1,6 @@
 Broker_PlayedTime
 by Phanx < addons@phanx.net >
-http://www.wowinterface.com/downloads/info-BrokerPlayedTime.html
+http://www.wowinterface.com/downloads/info16711-BrokerPlayedTime.html
 http://wow.curse.com/downloads/wow-addons/details/broker-playedtime.aspx
 
 Copyright © 2010 Phanx
