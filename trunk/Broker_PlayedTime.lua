@@ -4,7 +4,7 @@
 	by Phanx < addons@phanx.net >
 	Currently maintained by Akkorian < akkorian@hotmail.com >
 	Copyright © 2010 Phanx. Some rights reserved. See LICENSE.txt for details.
-	http://www.wowinterface.com/downloads/info-BrokerPlayedTime.html
+	http://www.wowinterface.com/downloads/info16711-BrokerPlayedTime.html
 	http://wow.curse.com/downloads/wow-addons/details/broker-playedtime.aspx
 ----------------------------------------------------------------------]]
 
@@ -270,8 +270,8 @@ BrokerPlayedTime.dataObject = LibStub( "LibDataBroker-1.1" ):NewDataObject( "Pla
 				end
 			end
 		end
-		tt:AddLine( " " )
-		tt:AddDoubleLine( L["Total"], FormatTime( total ) )
+		tooltip:AddLine( " " )
+		tooltip:AddDoubleLine( L["Total"], FormatTime( total ) )
 	end
 } )
 
@@ -300,21 +300,21 @@ BrokerPlayedTime.optionsPanel:SetScript( "OnShow", function( self )
 	local classIcons = CreateCheckbox( self, L[ "Show class icons" ] )
 	classIcons:SetPoint( "TOPLEFT", desc, "BOTTOMLEFT", 0, -8 )
 	classIcons:SetChecked( db.classIcons )
-	classIcons.setValue = function( checked )
+	classIcons.OnClick = function( checked )
 		db.classIcons = checked
 	end
 
 	local factionIcons = CreateCheckbox( self, L[ "Show faction icons" ] )
 	factionIcons:SetPoint( "TOPLEFT", classIcons, "BOTTOMLEFT", 0, -8 )
 	factionIcons:SetChecked( db.factionIcons )
-	factionIcons.setValue = function( checked )
+	factionIcons.OnClick = function( checked )
 		db.factionIcons = checked
 	end
 
 	local levels = CreateCheckbox( self, L[ "Show character levels" ] )
 	levels:SetPoint( "TOPLEFT", factionIcons, "BOTTOMLEFT", 0, -8 )
 	levels:SetChecked( db.levels )
-	levels.setValue = function( checked )
+	levels.OnClick = function( checked )
 		db.levels = checked
 	end
 
