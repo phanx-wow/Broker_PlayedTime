@@ -1,9 +1,9 @@
 --[[--------------------------------------------------------------------
 	Broker_PlayedTime
 	Tracks played time for all your characters.
-	by Phanx < addons@phanx.net >
-	Currently maintained by Akkorian < akkorian@hotmail.com >
-	Copyright © 2010 Phanx. Some rights reserved. See LICENSE.txt for details.
+	Written by Phanx <addons@phanx.net>
+	Currently maintained by Akkorian <akkorian@hotmail.com>
+	Copyright © 2010–2011 Phanx. Some rights reserved. See LICENSE.txt for details.
 	http://www.wowinterface.com/downloads/info16711-BrokerPlayedTime.html
 	http://wow.curse.com/downloads/wow-addons/details/broker-playedtime.aspx
 ----------------------------------------------------------------------]]

@@ -1,10 +1,10 @@
-Broker_PlayedTime
+﻿Broker_PlayedTime
 =================
 
-* by Phanx <addons@phanx.net>
-* Currently maintained by Akkorian <akkorian@hotmail.com>
-* Copyright © 2010 Phanx.  Some rights reserved. See LICENSE.txt for details.
-* http://www.wowinterface.com/downloads/info16711-BrokerPlayedTime.html
+* Written by Phanx <addons@phanx.net>
+* Maintained by Akkorian <akkorian@hotmail.com>
+* Copyright © 2010–2011 Phanx.  Some rights reserved. See LICENSE.txt for details.
+* http://www.wowinterface.com/downloads/info-BrokerPlayedTime.html
 * http://wow.curse.com/downloads/wow-addons/details/broker-playedtime.aspx
 
 
@@ -26,19 +26,21 @@ Usage
 The options panel can be found in the Interface Options window, or by
 right-clicking the plugin.
 
-To remove a character, type "/bpt delete Charname". If you have more
+To remove a character, type “/bpt delete Charname”. If you have more
 than one character with the same name (eg. on different realms), you
-must also specify the realm name: "/bpt delete Charname Realmname".
+must also specify the realm name: “/bpt delete Charname Realmname”.
 Finally, character and realm names must be correctly capitalized.
 
 
 Localization
 ------------
 
-Compatible with all locales.
+Broker_PlayedTime is compatible with English, Deutsch, Español,
+Français, Русский, 한국어, 简体中文, and 正體中文 game clients.
 
-Translated into English, Deutsch, and Español. If can provide
-translations for another locale, send me a PM.
+Broker_PlayedTime is translated into English, Deutsch, and Español.
+If you can provide translations for any locale, please send me a PM
+on either download site.
 
 
 Feedback
