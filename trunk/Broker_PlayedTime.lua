@@ -359,8 +359,12 @@ end
 SlashCmdList.BROKERPLAYEDTIME = function( input )
 	local command, name, realm = string.match( string.trim( input ), "^(%S+) (%S+) ?(.*)$" )
 
+	if not command then
+		return InterfaceOptionsFrame_OpenToCategory( BrokerPlayedTime.optionsPanel )
+	end
+
 	if command ~= "delete" then
-		return print( "Usage: /bpt delete Name" )
+		return print( [[Usage: "/bpt delete Name" or "/bpt delete Name Realm"]] )
 	end
 
 	if realm and string.len( realm ) > 0 then
