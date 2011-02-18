@@ -275,53 +275,37 @@ BrokerPlayedTime.dataObject = LibStub( "LibDataBroker-1.1" ):NewDataObject( "Pla
 	end
 } )
 
-BrokerPlayedTime.optionsPanel = CreateFrame( "Frame", nil, InterfaceOptionsFramePanelContainer )
-BrokerPlayedTime.optionsPanel:Hide()
-
-BrokerPlayedTime.optionsPanel.name = GetAddOnInfo( "Broker PlayedTime", "Title" )
-BrokerPlayedTime.optionsPanel:SetScript( "OnShow", function( self )
-	local name = self:CreateFontString( nil, "ARTWORK", "GameFontNormalLarge" )
-	name:SetPoint( "TOPLEFT", 16, -16 )
-	name:SetPoint( "TOPRIGHT", -16, -16 )
-	name:SetJustifyH( "LEFT" )
-	name:SetText( self.name )
-
-	local desc = self:CreateFontString( nil, "ARTWORK", "GameFontHighlightSmall" )
-	desc:SetPoint( "TOPLEFT", name, "BOTTOMLEFT", 0, -8 )
-	desc:SetPoint( "TOPRIGHT", name, "BOTTOMRIGHT", 0, -8 )
-	desc:SetHeight( 32 )
-	desc:SetJustifyH( "LEFT" )
-	desc:SetJustifyV( "TOP" )
-	desc:SetNonSpaceWrap( true )
-	desc:SetText( GetAddOnMetadata( "Broker_PlayedTime", "Notes" ) )
+BrokerPlayedTime.optionsPanel = LibStub( "PhanxConfig-OptionsPanel" ).CreateOptionsPanel( "Broker_PlayedTime", nil, function( self )
+	local title, notes = LibStub( "PhanxConfig-Header" ).CreateHeader( "Broker_PlayedTime", GetAddOnMetadata( "Broker_PlayedTime", "Notes" ) )
 
 	local CreateCheckbox = LibStub( "PhanxConfig-Checkbox" ).CreateCheckbox
 
 	local classIcons = CreateCheckbox( self, L[ "Show class icons" ] )
-	classIcons:SetPoint( "TOPLEFT", desc, "BOTTOMLEFT", 0, -8 )
-	classIcons:SetChecked( db.classIcons )
+	classIcons:SetPoint( "TOPLEFT", notes, "BOTTOMLEFT", 0, -8 )
 	classIcons.OnClick = function( checked )
 		db.classIcons = checked
 	end
 
 	local factionIcons = CreateCheckbox( self, L[ "Show faction icons" ] )
 	factionIcons:SetPoint( "TOPLEFT", classIcons, "BOTTOMLEFT", 0, -8 )
-	factionIcons:SetChecked( db.factionIcons )
 	factionIcons.OnClick = function( checked )
 		db.factionIcons = checked
 	end
 
 	local levels = CreateCheckbox( self, L[ "Show character levels" ] )
 	levels:SetPoint( "TOPLEFT", factionIcons, "BOTTOMLEFT", 0, -8 )
-	levels:SetChecked( db.levels )
 	levels.OnClick = function( checked )
 		db.levels = checked
 	end
 
-	self:SetScript( "OnShow", nil )
+	self.refresh = function()
+		classIcons:SetChecked( db.classIcons )
+		factionIcons:SetChecked( db.factionIcons )
+		levels:SetChecked( db.levels )
+	end
 end )
 
-InterfaceOptions_AddCategory( BrokerPlayedTime.optionsPanel )
+BrokerPlayedTime.aboutPanel = LibStub( "LibAboutPanel" ).new( "Broker_PlayedTime", "Broker_PlayedTime" )
 
 ------------------------------------------------------------------------
 
@@ -360,7 +344,9 @@ SlashCmdList.BROKERPLAYEDTIME = function( input )
 	local command, name, realm = string.match( string.trim( input ), "^(%S+) (%S+) ?(.*)$" )
 
 	if not command then
-		return InterfaceOptionsFrame_OpenToCategory( BrokerPlayedTime.optionsPanel )
+		InterfaceOptionsFrame_OpenToCategory( BrokerPlayedTime.aboutPanel )
+		InterfaceOptionsFrame_OpenToCategory( BrokerPlayedTime.optionsPanel )
+		return
 	end
 
 	if command ~= "delete" then
