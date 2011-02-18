@@ -276,7 +276,7 @@ BrokerPlayedTime.dataObject = LibStub( "LibDataBroker-1.1" ):NewDataObject( "Pla
 } )
 
 BrokerPlayedTime.optionsPanel = LibStub( "PhanxConfig-OptionsPanel" ).CreateOptionsPanel( "Broker_PlayedTime", nil, function( self )
-	local title, notes = LibStub( "PhanxConfig-Header" ).CreateHeader( "Broker_PlayedTime", GetAddOnMetadata( "Broker_PlayedTime", "Notes" ) )
+	local title, notes = LibStub( "PhanxConfig-Header" ).CreateHeader( self, self.name, GetAddOnMetadata( "Broker_PlayedTime", "Notes" ) )
 
 	local CreateCheckbox = LibStub( "PhanxConfig-Checkbox" ).CreateCheckbox
 
