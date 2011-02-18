@@ -1,5 +1,5 @@
 ## Interface: 40000
-## Version: 4.0.3.wowi:revision
+## Version: 4.0.6.wowi:revision
 
 ## Title: Broker PlayedTime
 ## Notes: DataBroker plugin to track played time across all your characters.
@@ -13,12 +13,13 @@
 ## X-Curse-Project-ID: broker-playedtime
 ## X-WoWI-ID: 16711
 
-## OptionalDependencies: LibDataBroker-1.1
 ## SavedVariables: BrokerPlayedTimeDB
 
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
 Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
 Libs\PhanxConfig-Checkbox\PhanxConfig-Checkbox.lua
+Libs\PhanxConfig-Header\PhanxConfig-Header.lua
+Libs\PhanxConfig-OptionsPanel\PhanxConfig-OptionsPanel.lua
 
 Broker_PlayedTime.lua
