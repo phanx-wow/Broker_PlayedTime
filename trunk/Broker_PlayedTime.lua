@@ -31,17 +31,17 @@ elseif LOCALE == "esES" or LOCALE == "esMX" then
 	L["Show faction icons"] = "Mostrar icono de facción"
 	L["Right click to remove a character."] = "Haz clic derecho para eliminar un personaje"
 elseif LOCALE == "frFR" then
---	L["Total"] = ""
---	L["Show character levels"] = ""
---	L["Show class icons"] = ""
---	L["Show faction icons"] = ""
---	L["Right click to remove a character."] = ""
+	L["Total"] = "Total"
+	L["Show character levels"] = "Niveaux de personnages"
+	L["Show class icons"] = "Icônes de classe"
+	L["Show faction icons"] = "Icônes de faction"
+	L["Right click to remove a character."] = "Clic droit pour supprimer un personnage."
 elseif LOCALE == "ruRU" then
---	L["Total"] = ""
---	L["Show character levels"] = ""
---	L["Show class icons"] = ""
---	L["Show faction icons"] = ""
---	L["Right click to remove a character."] = ""
+	L["Total"] = "Общее"
+	L["Show character levels"] = "Уровни символов"
+	L["Show class icons"] = "Иконы классов"
+	L["Show faction icons"] = "Иконы фракций"
+	L["Right click to remove a character."] = "Щелкните правой кнопкой мыши, чтобы удалить персонажа."
 elseif LOCALE == "koKR" then
 --	L["Total"] = ""
 --	L["Show character levels"] = ""
@@ -298,14 +298,17 @@ BrokerPlayedTime.optionsPanel = LibStub( "PhanxConfig-OptionsPanel" ).CreateOpti
 		db.levels = checked
 	end
 
+	local LibAboutPanel = LibStub( "LibAboutPanel", true )
+	if LibAboutPanel then
+		BrokerPlayedTime.aboutPanel = LibAboutPanel.new( "Broker_PlayedTime", "Broker_PlayedTime" )
+	end
+
 	self.refresh = function()
 		classIcons:SetChecked( db.classIcons )
 		factionIcons:SetChecked( db.factionIcons )
 		levels:SetChecked( db.levels )
 	end
 end )
-
-BrokerPlayedTime.aboutPanel = LibStub( "LibAboutPanel" ).new( "Broker_PlayedTime", "Broker_PlayedTime" )
 
 ------------------------------------------------------------------------
 
