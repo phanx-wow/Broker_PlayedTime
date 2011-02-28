@@ -14,40 +14,34 @@ Description
 Broker_PlayedTime is a DataBroker plugin to track your played time on
 all of your characters.
 
-The tooltip lists all of your characters, across both factions on all
+The tooltip lists all of your characters, on both factions, on all
 servers. The current character is listed first for quick reference.
-Character names are colored by class. It optionally displays faction
-icons, class icons, and character levels.
+Character names are colored by class. Character levels, class icons,
+and faction icons are also available.
 
-
-Usage
------
-
-The options panel can be found in the Interface Options window, or by
-right-clicking the plugin.
-
-To remove a character, type “/bpt delete Charname”. If you have more
-than one character with the same name (eg. on different realms), you
-must also specify the realm name: “/bpt delete Charname Realmname”.
-Finally, character and realm names must be correctly capitalized.
+Right-click the plugin for options.
 
 
 Localization
 ------------
 
-Broker_PlayedTime is compatible with English, Deutsch, Español,
-Français, Русский, 한국어, 简体中文, and 正體中文 game clients.
+Compatible with English, Deutsch, Español, Français, Русский, 한국어,
+简体中文, and 正體中文
 
-Broker_PlayedTime is translated into English, Deutsch, and Español.
-If you can provide translations for any locale, please send me a PM
-on either download site.
+Translated into English, Deutsch, Español, Français, Русский, 한국어,
+简体中文, and 正體中文
+
+For corrections or updates, send me a PM on either download site, or use
+the localization system on CurseForge:
+
+http://wow.curseforge.com/addons/broker-playedtime/localization/
 
 
 Feedback
 --------
 
 Please use the ticket system on either download site report bugs or
-request features. Use the comment system only for general questions
+request features. Use the comments section only for general questions
 or comments.
 
 If you need to contact me privately, you may do by private message
