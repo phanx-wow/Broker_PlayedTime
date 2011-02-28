@@ -8,7 +8,7 @@
 	http://wow.curse.com/downloads/wow-addons/details/broker-playedtime.aspx
 ----------------------------------------------------------------------]]
 
-local L = setmetatable( { }, { __index = function( t, k )
+local L = setmetatable( {}, { __index = function( t, k )
 	if k == nil then return "" end
 	local v = tostring( k )
 	t[ k ] = v
@@ -20,95 +20,160 @@ L["Time Played"] = TIME_PLAYED_MSG
 local LOCALE = GetLocale()
 if LOCALE == "deDE" then
 	L["Total"] = "Gesamt"
-	L["Show character levels"] = "Charakterstufen anzeigen"
-	L["Show class icons"] = "Klassensymbolen anzeigen"
-	L["Show faction icons"] = "Fraktionsymbolen anzeigen"
-	L["Right click to remove a character."] = "Rechtsklicken, um ein Charakter entfernen."
+	L["Character levels"] = "Charakterstufen"
+	L["Class icons"] = "Klassensymbolen"
+	L["Faction icons"] = "Fraktionsymbolen"
+	L["Remove character"] = "Charakter entfernen"
 elseif LOCALE == "esES" or LOCALE == "esMX" then
 	L["Total"] = "Total"
-	L["Show character levels"] = "Mostrar niveles de los personajes"
-	L["Show class icons"] = "Mostrar icono de clase"
-	L["Show faction icons"] = "Mostrar icono de facción"
-	L["Right click to remove a character."] = "Haz clic derecho para eliminar un personaje"
+	L["Character levels"] = "Niveles de personajes"
+	L["Class icons"] = "Iconos de clase"
+	L["Faction icons"] = "Iconos de facción"
+	L["Remove character"] = "Eliminar personaje"
 elseif LOCALE == "frFR" then
 	L["Total"] = "Total"
-	L["Show character levels"] = "Niveaux de personnages"
-	L["Show class icons"] = "Icônes de classe"
-	L["Show faction icons"] = "Icônes de faction"
-	L["Right click to remove a character."] = "Clic droit pour supprimer un personnage."
+	L["Character levels"] = "Niveaux de personnages"
+	L["Class icons"] = "Icônes de classe"
+	L["Faction icons"] = "Icônes de faction"
+	L["Remove character"] = "Supprimer personnage"
 elseif LOCALE == "ruRU" then
 	L["Total"] = "Общее"
-	L["Show character levels"] = "Уровни символов"
-	L["Show class icons"] = "Иконы классов"
-	L["Show faction icons"] = "Иконы фракций"
-	L["Right click to remove a character."] = "Щелкните правой кнопкой мыши, чтобы удалить персонажа."
+	L["Character levels"] = "Уровни символов"
+	L["Class icons"] = "Иконы классов"
+	L["Faction icons"] = "Иконы фракций"
+	L["Remove character"] = "Удалить персонаж"
 elseif LOCALE == "koKR" then
---	L["Total"] = ""
---	L["Show character levels"] = ""
---	L["Show class icons"] = ""
---	L["Show faction icons"] = ""
---	L["Right click to remove a character."] = ""
+	L["Total"] = "전체"
+	L["Character levels"] = "캐릭터 레벨"
+	L["Class icons"] = "직업 아이콘"
+	L["Faction icons"] = "진영 아이콘"
+	L["Remove character"] = "캐릭터 삭제"
 elseif LOCALE == "zhCN" then
---	L["Total"] = ""
---	L["Show character levels"] = ""
---	L["Show class icons"] = ""
---	L["Show faction icons"] = ""
---	L["Right click to remove a character."] = ""
+	L["Total"] = "总游戏时间"
+	L["Character levels"] = "角色等级"
+	L["Class icons"] = "职业图标"
+	L["Faction icons"] = "阵营图标"
+	L["Remove character"] = "移除角色"
+elseif LOCALE == "zhTW" then
+	L["Total"] = "總遊戲時間"
+	L["Character levels"] = "角色等級"
+	L["Class icons"] = "職業圖示"
+	L["Faction icons"] = "陣營圖示"
+	L["Remove character"] = "移除角色"
 end
 
 ------------------------------------------------------------------------
 
-local db
-local myDB
+local format = string.format
 
-local sortedFactions = { "Horde", "Alliance" }
-local sortedPlayers = { }
-local sortedRealms = { }
+local db, myDB
+local timePlayed, timeUpdated = 0, 0
+local sortedFactions, sortedPlayers, sortedRealms = { "Horde", "Alliance" }, {}, {}
 
 local currentFaction = UnitFactionGroup( "player" )
 local currentPlayer = UnitName( "player" )
-local currentRealm = GetRealmName( )
+local currentRealm = GetRealmName()
 
-local timePlayed = 0
-local timeUpdated = 0
-
-local maxLevel = MAX_PLAYER_LEVEL_TABLE[ GetAccountExpansionLevel( ) ]
+local MAX_LEVEL = MAX_PLAYER_LEVEL_TABLE[ GetAccountExpansionLevel() ]
 
 local factionIcons = {
-	Horde = "|TInterface\\AddOns\\Broker_PlayedTime\\Faction-Horde:0|t ",
-	Alliance = "|TInterface\\AddOns\\Broker_PlayedTime\\Faction-Alliance:0|t ",
+	Horde = [[|TInterface\AddOns\Broker_PlayedTime\Faction-Horde:0|t ]],
+	Alliance = [[|TInterface\AddOns\Broker_PlayedTime\Faction-Alliance:0|t ]],
 }
 
-local classIcons = { }
+local classIcons = {}
 for class, t in pairs( CLASS_BUTTONS ) do
 	local offset, left, right, bottom, top = 0.025, unpack( t )
-	classIcons[class] = string.format( "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:16:16:0:0:256:256:%s:%s:%s:%s|t ", ( left + offset ) * 256, ( right - offset ) * 256, ( bottom + offset ) * 256, ( top - offset ) * 256 )
+	classIcons[class] = format( [[|TInterface\Glues\CharacterCreate\UI-CharacterCreate-Classes:16:16:0:0:256:256:%s:%s:%s:%s|t ]], ( left + offset ) * 256, ( right - offset ) * 256, ( bottom + offset ) * 256, ( top - offset ) * 256 )
 end
 
 local GRAY = "cccccc"
-local CLASS_COLORS = { }
+local CLASS_COLORS = {}
 for k, v in pairs( RAID_CLASS_COLORS ) do
-	CLASS_COLORS[k] = string.format( "|cff%02x%02x%02x", v.r * 255, v.g * 255, v.b * 255 )
+	CLASS_COLORS[ k ] = format( "|cff%02x%02x%02x", v.r * 255, v.g * 255, v.b * 255 )
 end
 
-local function FormatTime( t )
-	if not t then return end
+------------------------------------------------------------------------
 
-	local d = math.floor( t / 86400 )
-	local h = math.floor( ( t - ( d * 86400 ) ) / 3600 )
-	local m = math.floor( ( t - ( d * 86400 ) - ( h * 3600 ) ) / 60 )
+local FormatTime
+do
+	local DAY, MIN, HOUR
+	function FormatTime( t )
+		if not t then return end
 
-	return string.format( "|cffffffff%d|r|cffffcc00d|r |cffffffff%02d|r|cffffcc00h|r |cffffffff%02d|r|cffffcc00m|r", d, h, m )
+		if not DAY then
+			local DAY_ABBR, HOUR_ABBR, MIN_ABBR = DAY_ONELETTER_ABBR:replace( "%d", "" ), HOUR_ONELETTER_ABBR:replace( "%d", "" ), MINUTE_ONELETTER_ABBR:replace( "%d", "" )
+			DAY = format( "|cffffffff%s|r|cffffcc00%s|r |cffffffff%s|r|cffffcc00%s|r |cffffffff%s|r|cffffcc00%s|r", "%d", DAY_ABBR, "%02d", HOUR_ABBR, "%02d", MIN_ABBR )
+			HOUR = format( "|cffffffff%s|r|cffffcc00%s|r |cffffffff%s|r|cffffcc00%s|r", "%d", HOUR_ABBR, "%02d", MIN_ABBR )
+			MIN = format( "|cffffffff%s|r|cffffcc00%s|r", "%d", MIN_ABBR )
+		end
+
+		local d, h, m = floor( t / 86400 ), floor( ( t % 86400 ) / 3600 ), floor( ( t % 3600 ) / 60 )
+
+		if d > 0 then
+			return format( DAY, d, h, m )
+		elseif h > 0 then
+			return format( HOUR, h, m )
+		else
+			return format( MIN, m )
+		end
+	end
 end
+
+------------------------------------------------------------------------
+
+local BuildSortedLists
+do
+	local function SortRealms( a, b )
+		if a == currentRealm then
+			return true
+		elseif b == currentRealm then
+			return false
+		end
+		return a < b
+	end
+
+	function BuildSortedLists()
+		wipe( sortedRealms )
+		for realm in pairs( db ) do
+			if type( db[ realm ] ) == "table" then
+				table.insert( sortedRealms, realm )
+				sortedPlayers[ realm ] = wipe( sortedPlayers[ realm ] or {} )
+				for faction in pairs( db[ realm ] ) do
+					sortedPlayers[ realm ][ faction ] = wipe( sortedPlayers[ realm ][ faction ] or {} )
+					for name in pairs( db[ realm ][ faction ] ) do
+						table.insert( sortedPlayers[ realm ][ faction ], name )
+					end
+					if realm == currentRealm and faction == currentFaction then
+						table.sort( sortedPlayers[ realm ][ faction ], function( a, b )
+							if a == currentPlayer then
+								return true
+							elseif b == currentPlayer then
+								return false
+							end
+							return a < b
+						end )
+					else
+						table.sort( sortedPlayers[ realm ][ faction ] )
+					end
+				end
+			end
+		end
+
+		table.sort( sortedRealms, SortRealms )
+	end
+end
+
+------------------------------------------------------------------------
 
 local BrokerPlayedTime = CreateFrame( "Frame" )
 BrokerPlayedTime:SetScript( "OnEvent", function( self, event, ... ) return self[ event ] and self[ event ] (self, ... ) end )
 BrokerPlayedTime:RegisterEvent( "PLAYER_LOGIN" )
 
-function BrokerPlayedTime:PLAYER_LOGIN( )
+function BrokerPlayedTime:PLAYER_LOGIN()
 	local function copyTable( src, dst )
-		if type( src ) ~= "table" then return { } end
-		if type( dst ) ~= "table" then dst = { } end
+		if type( src ) ~= "table" then return {} end
+		if type( dst ) ~= "table" then dst = {} end
 		for k, v in pairs( src ) do
 			if type( v ) == "table" then
 				dst[ k ] = copyTable( v, dst[ k ] )
@@ -135,49 +200,17 @@ function BrokerPlayedTime:PLAYER_LOGIN( )
 		}
 	}
 
-	BrokerPlayedTimeDB = BrokerPlayedTimeDB or { }
+	BrokerPlayedTimeDB = BrokerPlayedTimeDB or {}
 	db = copyTable( defaults, BrokerPlayedTimeDB )
 
 	myDB = db[ currentRealm ][ currentFaction ][ currentPlayer ]
 
-	for realm in pairs( db ) do
-		if type( db[ realm ] ) == "table" then
-			table.insert( sortedRealms, realm )
-			sortedPlayers[ realm ] = { }
-			for faction in pairs( db[ realm ] ) do
-				sortedPlayers[ realm ][ faction ] = { }
-				for name in pairs( db[ realm ][ faction ] ) do
-					table.insert( sortedPlayers[ realm ][ faction ], name )
-				end
-				if realm == currentRealm and faction == currentFaction then
-					table.sort( sortedPlayers[ realm ][ faction ], function( a, b )
-						if a == currentPlayer then
-							return true
-						elseif b == currentPlayer then
-							return false
-						end
-						return a < b
-					end )
-				else
-					table.sort( sortedPlayers[ realm ][ faction ] )
-				end
-			end
-		end
-	end
-
-	table.sort( sortedRealms, function( a, b )
-		if a == currentRealm then
-			return true
-		elseif b == currentRealm then
-			return false
-		end
-		return a < b
-	end )
+	BuildSortedLists()
 
 	if CUSTOM_CLASS_COLORS then
 		local function UpdateClassColors()
 			for k, v in pairs( CUSTOM_CLASS_COLORS ) do
-				CLASS_COLORS[ k ] = string.format( "|cff%02x%02x%02x", v.r * 255, v.g * 255, v.b * 255 )
+				CLASS_COLORS[ k ] = format( "|cff%02x%02x%02x", v.r * 255, v.g * 255, v.b * 255 )
 			end
 		end
 		UpdateClassColors()
@@ -230,156 +263,201 @@ function BrokerPlayedTime:TIME_PLAYED_MSG( t )
 	self:SaveTimePlayed()
 end
 
-BrokerPlayedTime.dataObject = LibStub( "LibDataBroker-1.1" ):NewDataObject( "PlayedTime", {
-	type = "data source",
-	icon = "Interface\\Icons\\Spell_Nature_TimeStop",
-	text = L["Time Played"],
-	OnClick = function( self, button )
-		if button == "RightButton" then
-			InterfaceOptionsFrame_OpenToCategory( BrokerPlayedTime.optionsPanel )
-		end
-	end,
-	OnTooltipShow = function( tooltip )
-		local total = 0
-		tooltip:AddLine( L["Time Played"] )
+------------------------------------------------------------------------
+
+local BrokerPlayedTimeMenu = CreateFrame( "Frame", "BrokerPlayedTimeMenu", nil, "UIDropDownMenuTemplate" )
+BrokerPlayedTimeMenu.displayMode = "MENU"
+BrokerPlayedTimeMenu.info = {}
+
+BrokerPlayedTimeMenu.GetClassIcons = function() return db.classIcons end
+BrokerPlayedTimeMenu.SetClassIcons = function() db.classIcons = not db.classIcons end
+
+BrokerPlayedTimeMenu.GetFactionIcons = function() return db.factionIcons end
+BrokerPlayedTimeMenu.SetFactionIcons = function() db.factionIcons = not db.factionIcons end
+
+BrokerPlayedTimeMenu.GetLevels = function() return db.levels end
+BrokerPlayedTimeMenu.SetLevels = function() db.levels = not db.levels end
+
+BrokerPlayedTimeMenu.CloseDropDownMenus = function() CloseDropDownMenus() end
+
+BrokerPlayedTimeMenu.RemoveCharacter = function( button )
+	local value = button and button.value or UIDROPDOWNMENU_MENU_VALUE
+	local realm, faction, name = string.split( "#", value )
+	if realm and faction and name and db[ realm ] and db[ realm ][ faction ] and db[ realm ][ faction ][ name ] then
+		db[ realm ][ faction ][ name ] = nil
+		BuildSortedLists()
+	end
+end
+
+BrokerPlayedTimeMenu.initialize = function( self, level )
+	if not level then return end
+	local info = wipe( self.info )
+	if level == 1 then
+		info.text = L["Played Time"]
+		info.isTitle = 1
+		info.notCheckable = 1
+		UIDropDownMenu_AddButton( info, level )
+
+		info.isTitle = nil
+
+		info.text = " "
+		info.disabled = 1
+		info.notCheckable = 1
+		UIDropDownMenu_AddButton( info, level )
+
+		info.disabled = nil
+		info.notCheckable = nil
+
+		info.keepShownOnClick = 1
+
+		info.text = L["Character levels"]
+		info.checked = self.GetLevels
+		info.func = self.SetLevels
+		UIDropDownMenu_AddButton( info, level )
+
+		info.text = L["Class icons"]
+		info.checked = self.GetClassIcons
+		info.func = self.SetClassIcons
+		UIDropDownMenu_AddButton( info, level )
+
+		info.text = L["Faction icons"]
+		info.checked = self.GetFactionIcons
+		info.func = self.SetFactionIcons
+		UIDropDownMenu_AddButton( info, level )
+
+		info.checked = nil
+		info.func = nil
+
+		info.text = " "
+		info.disabled = 1
+		info.notCheckable = 1
+		UIDropDownMenu_AddButton( info, level )
+
+		info.disabled = nil
+		info.notCheckable = 1
+
+		info.text = L["Remove character"]
+		info.hasArrow = 1
+		UIDropDownMenu_AddButton( info, level )
+
+		info.checked = nil
+		info.func = nil
+		info.hasArrow = nil
+
+		info.text = " "
+		info.disabled = 1
+		UIDropDownMenu_AddButton( info, level )
+
+		info.disabled = nil
+		info.keepShownOnClick = nil
+
+		info.text = CLOSE
+		info.func = self.CloseDropDownMenus
+		info.notCheckable = 1
+		UIDropDownMenu_AddButton( info, level )
+	elseif level == 2 then
 		for _, realm in ipairs( sortedRealms ) do
-			tooltip:AddLine(" ")
+			info.text = realm
+			info.value = realm
+			info.hasArrow = 1
+			info.keepShownOnClick = 1
+			info.notCheckable = 1
+			UIDropDownMenu_AddButton( info, level )
+		end
+	elseif level == 3 then
+		local factions = 0
+		for i, faction in ipairs( sortedFactions ) do
+			info.value = nil
+			info.colorCode = nil
+			info.func = nil
+
+			local realm = UIDROPDOWNMENU_MENU_VALUE
+			local rfp = sortedPlayers[ realm ][ faction ]
+
+			if rfp then
+				factions = factions + 1
+
+				if factions > 1 then
+					info.text = " "
+					info.disabled = 1
+					info.notCheckable = 1
+					UIDropDownMenu_AddButton( info, level )
+				end
+
+				info.disabled = nil
+
+				info.text = faction
+				info.isTitle = 1
+				info.notCheckable = 1
+				UIDropDownMenu_AddButton( info, level )
+
+				info.disabled = nil
+				info.isTitle = nil
+				info.notCheckable = nil
+
+				for j, name in ipairs( rfp ) do
+					info.text = name
+					info.value = format( "%s#%s#%s", realm, faction, name )
+					info.colorCode = CLASS_COLORS[ db[ realm ][ faction ][ name ].class ] or GRAY
+					info.disabled = j == 1
+					info.func = self.RemoveCharacter
+					UIDropDownMenu_AddButton( info, level )
+				end
+			end
+		end
+	end
+end
+
+------------------------------------------------------------------------
+
+local function OnTooltipShow( tooltip )
+	local total = 0
+	tooltip:AddLine( L["Time Played"] )
+	for _, realm in ipairs( sortedRealms ) do
+		tooltip:AddLine(" ")
+		if #sortedRealms > 1 then
 			tooltip:AddLine( realm )
-			for _, faction in ipairs( sortedFactions ) do
-				local nfr = sortedPlayers[ realm ][ faction ]
-				if nfr and #nfr > 0 then
-					for _, name in ipairs( nfr ) do
-						local data = db[ realm ][ faction ][ name ]
-						if data then
-							local t
-							if realm == currentRealm and name == currentPlayer then
-								t = data.timePlayed + time() - data.timeUpdated
+		end
+		for _, faction in ipairs( sortedFactions ) do
+			local nfr = sortedPlayers[ realm ][ faction ]
+			if nfr and #nfr > 0 then
+				for _, name in ipairs( nfr ) do
+					local data = db[ realm ][ faction ][ name ]
+					if data then
+						local t
+						if realm == currentRealm and name == currentPlayer then
+							t = data.timePlayed + time() - data.timeUpdated
+						else
+							t = data.timePlayed
+						end
+						if t > 0 then
+							if db.levels then
+								tooltip:AddDoubleLine( format("%s%s%s%s (%s)|r", db.factionIcons and factionIcons[ faction ] or "", db.classIcons and classIcons[ data.class ] or "", CLASS_COLORS[ data.class ] or GRAY, name, data.level ), FormatTime( t ) )
 							else
-								t = data.timePlayed
+								tooltip:AddDoubleLine( format("%s%s%s%s|r", db.factionIcons and factionIcons[ faction ] or "", db.classIcons and classIcons[ data.class ] or "", CLASS_COLORS[ data.class ] or GRAY, name ), FormatTime( t ) )
 							end
-							if t > 0 then
-								if db.levels then
-									tooltip:AddDoubleLine( string.format("%s%s%s%s (%s)|r", db.factionIcons and factionIcons[ faction ] or "", db.classIcons and classIcons[ data.class ] or "", CLASS_COLORS[ data.class ] or GRAY, name, data.level ), FormatTime( t ) )
-								else
-									tooltip:AddDoubleLine( string.format("%s%s%s%s|r", db.factionIcons and factionIcons[ faction ] or "", db.classIcons and classIcons[ data.class ] or "", CLASS_COLORS[ data.class ] or GRAY, name ), FormatTime( t ) )
-								end
-								total = total + t
-							end
+							total = total + t
 						end
 					end
 				end
 			end
 		end
-		tooltip:AddLine( " " )
-		tooltip:AddDoubleLine( L["Total"], FormatTime( total ) )
 	end
-} )
-
-BrokerPlayedTime.optionsPanel = LibStub( "PhanxConfig-OptionsPanel" ).CreateOptionsPanel( "Broker_PlayedTime", nil, function( self )
-	local title, notes = LibStub( "PhanxConfig-Header" ).CreateHeader( self, self.name, GetAddOnMetadata( "Broker_PlayedTime", "Notes" ) )
-
-	local CreateCheckbox = LibStub( "PhanxConfig-Checkbox" ).CreateCheckbox
-
-	local classIcons = CreateCheckbox( self, L[ "Show class icons" ] )
-	classIcons:SetPoint( "TOPLEFT", notes, "BOTTOMLEFT", 0, -8 )
-	classIcons.OnClick = function( self, checked )
-		db.classIcons = checked
-	end
-
-	local factionIcons = CreateCheckbox( self, L[ "Show faction icons" ] )
-	factionIcons:SetPoint( "TOPLEFT", classIcons, "BOTTOMLEFT", 0, -8 )
-	factionIcons.OnClick = function( self, checked )
-		db.factionIcons = checked
-	end
-
-	local levels = CreateCheckbox( self, L[ "Show character levels" ] )
-	levels:SetPoint( "TOPLEFT", factionIcons, "BOTTOMLEFT", 0, -8 )
-	levels.OnClick = function( self, checked )
-		db.levels = checked
-	end
-
-	local LibAboutPanel = LibStub( "LibAboutPanel", true )
-	if LibAboutPanel then
-		BrokerPlayedTime.aboutPanel = LibAboutPanel.new( "Broker_PlayedTime", "Broker_PlayedTime" )
-	end
-
-	self.refresh = function()
-		classIcons:SetChecked( db.classIcons )
-		factionIcons:SetChecked( db.factionIcons )
-		levels:SetChecked( db.levels )
-	end
-end )
+	tooltip:AddLine( " " )
+	tooltip:AddDoubleLine( L["Total"], FormatTime( total ) )
+end
 
 ------------------------------------------------------------------------
 
-SLASH_BROKERPLAYEDTIME1 = "/bpt"
-
-local function Purge( realm, faction, name )
-	db[ realm ][ faction ][ name ] = nil
-	sortedPlayers[ realm ][ faction ][ name ] = nil
-
-	local n = 0
-	for k in pairs( db[ realm ][ faction ] ) do
-		n = n + 1
-	end
-	if n == 0 then
-		db[ realm ][ faction ] = nil
-		sortedPlayers[ realm ][ faction ] = nil
-	end
-
-	n = 0
-	for k in pairs( db[ realm ] ) do
-		n = n + 1
-	end
-	if n == 0 then
-		db[ realm ] = nil
-		sortedPlayers[ realm ] = nil
-		for i, v in pairs( sortedRealms ) do
-			if v == realm then
-				sortedRealms[ i ] = nil
-				break
-			end
+BrokerPlayedTime.dataObject = LibStub( "LibDataBroker-1.1" ):NewDataObject( "PlayedTime", {
+	type = "data source",
+	icon = [[Interface\Icons\Spell_Nature_TimeStop]],
+	OnTooltipShow = OnTooltipShow,
+	OnClick = function( self, button )
+		if button == "RightButton" then
+			ToggleDropDownMenu( 1, nil, BrokerPlayedTimeMenu, self, 0, 0 )
 		end
-	end
-end
+	end,
+} )
 
-SlashCmdList.BROKERPLAYEDTIME = function( input )
-	local command, name, realm = string.match( string.trim( input ), "^(%S+) (%S+) ?(.*)$" )
-
-	if not command or command == "" then
-		InterfaceOptionsFrame_OpenToCategory( BrokerPlayedTime.optionsPanel )
-		return
-	end
-
-	if command ~= "delete" then
-		return print( [[Usage: "/bpt delete Name" or "/bpt delete Name Realm"]] )
-	end
-
-	if realm and string.len( realm ) > 0 then
-		local realmData = db[ realm ]
-		if realmData then
-			for faction, factionData in pairs( realmData ) do
-				if factionData[ name ] then
-					Purge( realm, faction, name )
-					return print( "Character", name, "of", realm, "successfully removed." )
-				else
-					return print( "Character", name, "of", realm, "not found." )
-				end
-			end
-		end
-		return print( "Realm", realm, "not found." )
-	end
-
-	for realm, realmData in pairs( db ) do
-		if type( realmData ) == "table" then
-			for faction, factionData in pairs( realmData ) do
-				if factionData[ name ] then
-					Purge( realm, faction, name )
-					return print( "Character", name, "of", realm, "successfully removed." )
-				end
-			end
-		end
-	end
-
-	return print( "Character", name, "not found." )
-end
+------------------------------------------------------------------------
