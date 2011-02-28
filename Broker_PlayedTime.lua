@@ -121,8 +121,8 @@ function BrokerPlayedTime:PLAYER_LOGIN( )
 
 	local defaults = {
 		classIcons = false,
-		factionIcons = true,
-		levels = true,
+		factionIcons = false,
+		levels = false,
 		[ currentRealm ] = {
 			[ currentFaction ] = {
 				[ currentPlayer ] = {
@@ -282,19 +282,19 @@ BrokerPlayedTime.optionsPanel = LibStub( "PhanxConfig-OptionsPanel" ).CreateOpti
 
 	local classIcons = CreateCheckbox( self, L[ "Show class icons" ] )
 	classIcons:SetPoint( "TOPLEFT", notes, "BOTTOMLEFT", 0, -8 )
-	classIcons.OnClick = function( checked )
+	classIcons.OnClick = function( self, checked )
 		db.classIcons = checked
 	end
 
 	local factionIcons = CreateCheckbox( self, L[ "Show faction icons" ] )
 	factionIcons:SetPoint( "TOPLEFT", classIcons, "BOTTOMLEFT", 0, -8 )
-	factionIcons.OnClick = function( checked )
+	factionIcons.OnClick = function( self, checked )
 		db.factionIcons = checked
 	end
 
 	local levels = CreateCheckbox( self, L[ "Show character levels" ] )
 	levels:SetPoint( "TOPLEFT", factionIcons, "BOTTOMLEFT", 0, -8 )
-	levels.OnClick = function( checked )
+	levels.OnClick = function( self, checked )
 		db.levels = checked
 	end
 
@@ -346,8 +346,7 @@ end
 SlashCmdList.BROKERPLAYEDTIME = function( input )
 	local command, name, realm = string.match( string.trim( input ), "^(%S+) (%S+) ?(.*)$" )
 
-	if not command then
-		InterfaceOptionsFrame_OpenToCategory( BrokerPlayedTime.aboutPanel )
+	if not command or command == "" then
 		InterfaceOptionsFrame_OpenToCategory( BrokerPlayedTime.optionsPanel )
 		return
 	end
