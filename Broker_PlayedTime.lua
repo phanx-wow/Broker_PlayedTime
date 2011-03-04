@@ -87,8 +87,7 @@ for class, t in pairs( CLASS_BUTTONS ) do
 	classIcons[class] = format( [[|TInterface\Glues\CharacterCreate\UI-CharacterCreate-Classes:16:16:0:0:256:256:%s:%s:%s:%s|t ]], ( left + offset ) * 256, ( right - offset ) * 256, ( bottom + offset ) * 256, ( top - offset ) * 256 )
 end
 
-local GRAY = "cccccc"
-local CLASS_COLORS = {}
+local CLASS_COLORS = { UNKNOWN = "|cffcccccc" }
 for k, v in pairs( RAID_CLASS_COLORS ) do
 	CLASS_COLORS[ k ] = format( "|cff%02x%02x%02x", v.r * 255, v.g * 255, v.b * 255 )
 end
@@ -124,6 +123,15 @@ end
 
 local BuildSortedLists
 do
+	local function SortPlayers( a, b )
+		if a == currentPlayer then
+			return true
+		elseif b == currentPlayer then
+			return false
+		end
+		return a < b
+	end
+
 	local function SortRealms( a, b )
 		if a == currentRealm then
 			return true
@@ -145,21 +153,13 @@ do
 						table.insert( sortedPlayers[ realm ][ faction ], name )
 					end
 					if realm == currentRealm and faction == currentFaction then
-						table.sort( sortedPlayers[ realm ][ faction ], function( a, b )
-							if a == currentPlayer then
-								return true
-							elseif b == currentPlayer then
-								return false
-							end
-							return a < b
-						end )
+						table.sort( sortedPlayers[ realm ][ faction ], SortPlayers )
 					else
 						table.sort( sortedPlayers[ realm ][ faction ] )
 					end
 				end
 			end
 		end
-
 		table.sort( sortedRealms, SortRealms )
 	end
 end
@@ -285,6 +285,24 @@ BrokerPlayedTimeMenu.RemoveCharacter = function( button )
 	local realm, faction, name = string.split( "#", value )
 	if realm and faction and name and db[ realm ] and db[ realm ][ faction ] and db[ realm ][ faction ][ name ] then
 		db[ realm ][ faction ][ name ] = nil
+
+		local nf = 0
+		for k in pairs( db[ realm ][ faction ] ) do
+			nf = nf + 1
+		end
+		if nf == 0 then
+			db[ realm ][ faction ] = nil
+		end
+
+		local nr = 0
+		for k in pairs( db[ realm ] ) do
+			nr = nr + 1
+		end
+		if nr == 0 then
+			db[ realm ] = nil
+			sortedRealms[ realm ] = nil
+		end
+
 		BuildSortedLists()
 	end
 end
@@ -396,10 +414,12 @@ BrokerPlayedTimeMenu.initialize = function( self, level )
 				info.notCheckable = nil
 
 				for j, name in ipairs( rfp ) do
+					local cdata = db[ realm ][ faction ][ name ]
+
 					info.text = name
 					info.value = format( "%s#%s#%s", realm, faction, name )
-					info.colorCode = CLASS_COLORS[ db[ realm ][ faction ][ name ].class ] or GRAY
-					info.disabled = j == 1
+					info.colorCode = CLASS_COLORS[ cdata and cdata.class or "UNKNOWN" ]
+					info.disabled = ( j == 1 and realm == currentRealm )
 					info.func = self.RemoveCharacter
 					UIDropDownMenu_AddButton( info, level )
 				end
