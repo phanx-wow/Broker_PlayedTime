@@ -419,7 +419,7 @@ BrokerPlayedTimeMenu.initialize = function( self, level )
 					info.text = name
 					info.value = format( "%s#%s#%s", realm, faction, name )
 					info.colorCode = CLASS_COLORS[ cdata and cdata.class or "UNKNOWN" ]
-					info.disabled = ( j == 1 and realm == currentRealm )
+					info.disabled = ( name == currentPlayer and realm == currentRealm )
 					info.func = self.RemoveCharacter
 					UIDropDownMenu_AddButton( info, level )
 				end
@@ -472,6 +472,7 @@ end
 BrokerPlayedTime.dataObject = LibStub( "LibDataBroker-1.1" ):NewDataObject( "PlayedTime", {
 	type = "data source",
 	icon = [[Interface\Icons\Spell_Nature_TimeStop]],
+	text = L["Time Played"],
 	OnTooltipShow = OnTooltipShow,
 	OnClick = function( self, button )
 		if button == "RightButton" then
