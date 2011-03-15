@@ -36,11 +36,11 @@ elseif LOCALE == "frFR" then
 	L["Class icons"] = "Icônes de classe"
 	L["Faction icons"] = "Icônes de faction"
 	L["Remove character"] = "Supprimer personnage"
-elseif LOCALE == "ruRU" then
+elseif LOCALE == "ruRU" then -- Last updated 2011-03-01 by YOti @ CurseForge
 	L["Total"] = "Общее"
-	L["Character levels"] = "Уровни символов"
-	L["Class icons"] = "Иконы классов"
-	L["Faction icons"] = "Иконы фракций"
+	L["Character levels"] = "Уровни персонажей"
+	L["Class icons"] = "Значки классов"
+	L["Faction icons"] = "Значки фракций"
 	L["Remove character"] = "Удалить персонаж"
 elseif LOCALE == "koKR" then
 	L["Total"] = "전체"
