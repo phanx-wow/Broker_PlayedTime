@@ -1,5 +1,5 @@
-## Interface: 40100
-## Version: 4.1.0.wowi:revision
+## Interface: 40200
+## Version: 4.2.0.wowi:revision
 
 ## Title: Broker PlayedTime
 ## Notes: DataBroker plugin to track played time across all your characters.
