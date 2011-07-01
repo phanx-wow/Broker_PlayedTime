@@ -101,7 +101,7 @@ do
 		if not t then return end
 
 		if not DAY then
-			local DAY_ABBR, HOUR_ABBR, MIN_ABBR = DAY_ONELETTER_ABBR:replace( "%d", "" ), HOUR_ONELETTER_ABBR:replace( "%d", "" ), MINUTE_ONELETTER_ABBR:replace( "%d", "" )
+			local DAY_ABBR, HOUR_ABBR, MIN_ABBR = DAY_ONELETTER_ABBR:gsub( "%%d", "" ), HOUR_ONELETTER_ABBR:gsub( "%%d", "" ), MINUTE_ONELETTER_ABBR:gsub( "%%d", "" )
 			DAY = format( "|cffffffff%s|r|cffffcc00%s|r |cffffffff%s|r|cffffcc00%s|r |cffffffff%s|r|cffffcc00%s|r", "%d", DAY_ABBR, "%02d", HOUR_ABBR, "%02d", MIN_ABBR )
 			HOUR = format( "|cffffffff%s|r|cffffcc00%s|r |cffffffff%s|r|cffffcc00%s|r", "%d", HOUR_ABBR, "%02d", MIN_ABBR )
 			MIN = format( "|cffffffff%s|r|cffffcc00%s|r", "%d", MIN_ABBR )
