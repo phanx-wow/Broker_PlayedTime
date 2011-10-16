@@ -1,5 +1,5 @@
-## Interface: 40200
-## Version: 4.2.0.wowi:revision
+## Interface: 40300
+## Version: 4.3.0.wowi:revision
 
 ## Title: Broker PlayedTime
 ## Notes: DataBroker plugin to track played time across all your characters.
@@ -10,8 +10,8 @@
 ## X-Email: addons@phanx.net
 ## X-Copyright: Copyright © 2010–2011 Phanx
 ## X-License: Some rights reserved. See LICENSE.txt for details.
-## X-CompatibleLocales: enUS, deDE, esES, esMX, frFR, koKR, ruRU, zhCN, zhTW
-## X-Localizations: enUS, deDE, esES, esMX, frFR, koKR, ruRU, zhCN, zhTW
+## X-CompatibleLocales: enUS, deDE, esES, esMX, frFR, ptBR, ruRU, koKR, zhCN, zhTW
+## X-Localizations: enUS, deDE, esES, esMX, frFR, ptBR, ruRU, koKR, zhCN, zhTW
 ## X-Website: http://www.wowinterface.com/downloads/info16711-BrokerPlayedTime.html
 ## X-Curse-Project-ID: broker-playedtime
 ## X-WoWI-ID: 16711

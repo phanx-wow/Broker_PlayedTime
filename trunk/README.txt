@@ -25,11 +25,11 @@ Right-click the plugin for options.
 Localization
 ------------
 
-Compatible with English, Deutsch, Español, Français, Русский, 한국어,
-简体中文, and 正體中文
+Compatible with English, Deutsch, Español, Français, Português, Русский,
+한국어, 简体中文, and 正體中文 game clients.
 
-Translated into English, Deutsch, Español, Français, Русский, 한국어,
-简体中文, and 正體中文
+Translated into English, Deutsch, Español, Français, Português, Русский,
+한국어, 简体中文, and 正體中文.
 
 For corrections or updates, send me a PM on either download site, or use
 the localization system on CurseForge:
@@ -45,4 +45,4 @@ request features. Use the comments section only for general questions
 or comments.
 
 If you need to contact me privately, you may do by private message
-on either download site, or by email at <akkorian@hotmail.com>.
+on either download site, or by email at <addons@phanx.net>.
