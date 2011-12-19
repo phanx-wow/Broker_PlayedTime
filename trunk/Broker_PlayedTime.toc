@@ -6,7 +6,7 @@
 ## Notes-esES: Plugin de DataBroker para rastrear el tiempo jugado en todos sus personajes.
 ## Notes-esMX: Plugin de DataBroker para rastrear el tiempo jugado en todos sus personajes.
 ## Notes-ptBR: Plugin do DataBroker para rastrear o tempo jogado em todos os seus personagens.
-## Author: Phanx, Akkorian
+## Author: Phanx
 ## X-Email: addons@phanx.net
 ## X-Copyright: Copyright © 2010–2011 Phanx
 ## X-License: Some rights reserved. See LICENSE.txt for details.
