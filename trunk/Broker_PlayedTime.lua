@@ -332,6 +332,7 @@ BrokerPlayedTimeMenu.initialize = function( self, level )
 		info.notCheckable = nil
 
 		info.keepShownOnClick = 1
+		info.isNotRadio = true
 
 		info.text = L["Character levels"]
 		info.checked = self.GetLevels
@@ -350,6 +351,7 @@ BrokerPlayedTimeMenu.initialize = function( self, level )
 
 		info.checked = nil
 		info.func = nil
+		info.isNotRadio = nil
 
 		info.text = " "
 		info.disabled = 1
@@ -416,7 +418,6 @@ BrokerPlayedTimeMenu.initialize = function( self, level )
 
 				info.disabled = nil
 				info.isTitle = nil
-				info.notCheckable = nil
 
 				for j, name in ipairs( rfp ) do
 					local cdata = db[ realm ][ faction ][ name ]
