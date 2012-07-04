@@ -7,10 +7,10 @@
 	http://www.curse.com/addons/wow/broker-playedtime
 ----------------------------------------------------------------------]]
 
-local L = setmetatable( {}, { __index = function( t, k )
+local L = setmetatable({}, { __index = function(t, k)
 	if k == nil then return "" end
-	local v = tostring( k )
-	t[ k ] = v
+	local v = tostring(k)
+	t[k] = v
 	return v
 end})
 
@@ -75,26 +75,26 @@ local db, myDB
 local timePlayed, timeUpdated = 0, 0
 local sortedFactions, sortedPlayers, sortedRealms = { "Horde", "Alliance" }, {}, {}
 
-local currentFaction = UnitFactionGroup( "player" )
-local currentPlayer = UnitName( "player" )
+local currentFaction = UnitFactionGroup("player")
+local currentPlayer = UnitName("player")
 local currentRealm = GetRealmName()
 
-local MAX_LEVEL = MAX_PLAYER_LEVEL_TABLE[ GetAccountExpansionLevel() ]
+local MAX_LEVEL = MAX_PLAYER_LEVEL_TABLE[GetAccountExpansionLevel()]
 
 local factionIcons = {
-	Horde = [[|TInterface\AddOns\Broker_PlayedTime\Faction-Horde:0|t ]],
-	Alliance = [[|TInterface\AddOns\Broker_PlayedTime\Faction-Alliance:0|t ]],
+	Horde = [[|TInterface\AddOns\Broker_PlayedTime\Faction-Horde:0|t]],
+	Alliance = [[|TInterface\AddOns\Broker_PlayedTime\Faction-Alliance:0|t]],
 }
 
 local classIcons = {}
-for class, t in pairs( CLASS_BUTTONS ) do
-	local offset, left, right, bottom, top = 0.025, unpack( t )
-	classIcons[class] = format( [[|TInterface\Glues\CharacterCreate\UI-CharacterCreate-Classes:16:16:0:0:256:256:%s:%s:%s:%s|t ]], ( left + offset ) * 256, ( right - offset ) * 256, ( bottom + offset ) * 256, ( top - offset ) * 256 )
+for class, t in pairs(CLASS_BUTTONS) do
+	local offset, left, right, bottom, top = 0.025, unpack(t)
+	classIcons[class] = format([[|TInterface\Glues\CharacterCreate\UI-CharacterCreate-Classes:16:16:0:0:256:256:%s:%s:%s:%s|t]], (left + offset) * 256, (right - offset) * 256, (bottom + offset) * 256, (top - offset) * 256)
 end
 
 local CLASS_COLORS = { UNKNOWN = "|cffcccccc" }
-for k, v in pairs( RAID_CLASS_COLORS ) do
-	CLASS_COLORS[ k ] = format( "|cff%02x%02x%02x", v.r * 255, v.g * 255, v.b * 255 )
+for k, v in pairs(RAID_CLASS_COLORS) do
+	CLASS_COLORS[k] = format("|cff%02x%02x%02x", v.r * 255, v.g * 255, v.b * 255)
 end
 
 ------------------------------------------------------------------------
@@ -102,24 +102,24 @@ end
 local FormatTime
 do
 	local DAY, MIN, HOUR
-	function FormatTime( t )
+	function FormatTime(t)
 		if not t then return end
 
 		if not DAY then
-			local DAY_ABBR, HOUR_ABBR, MIN_ABBR = DAY_ONELETTER_ABBR:gsub( "%%d", "" ), HOUR_ONELETTER_ABBR:gsub( "%%d", "" ), MINUTE_ONELETTER_ABBR:gsub( "%%d", "" )
-			DAY = format( "|cffffffff%s|r|cffffcc00%s|r |cffffffff%s|r|cffffcc00%s|r |cffffffff%s|r|cffffcc00%s|r", "%d", DAY_ABBR, "%02d", HOUR_ABBR, "%02d", MIN_ABBR )
-			HOUR = format( "|cffffffff%s|r|cffffcc00%s|r |cffffffff%s|r|cffffcc00%s|r", "%d", HOUR_ABBR, "%02d", MIN_ABBR )
-			MIN = format( "|cffffffff%s|r|cffffcc00%s|r", "%d", MIN_ABBR )
+			local DAY_ABBR, HOUR_ABBR, MIN_ABBR = DAY_ONELETTER_ABBR:gsub("%%d", ""), HOUR_ONELETTER_ABBR:gsub("%%d", ""), MINUTE_ONELETTER_ABBR:gsub("%%d", "")
+			DAY = format("|cffffffff%s|r|cffffcc00%s|r |cffffffff%s|r|cffffcc00%s|r |cffffffff%s|r|cffffcc00%s|r", "%d", DAY_ABBR, "%02d", HOUR_ABBR, "%02d", MIN_ABBR)
+			HOUR = format("|cffffffff%s|r|cffffcc00%s|r |cffffffff%s|r|cffffcc00%s|r", "%d", HOUR_ABBR, "%02d", MIN_ABBR)
+			MIN = format("|cffffffff%s|r|cffffcc00%s|r", "%d", MIN_ABBR)
 		end
 
-		local d, h, m = floor( t / 86400 ), floor( ( t % 86400 ) / 3600 ), floor( ( t % 3600 ) / 60 )
+		local d, h, m = floor(t / 86400), floor((t % 86400) / 3600), floor((t % 3600) / 60)
 
 		if d > 0 then
-			return format( DAY, d, h, m )
+			return format(DAY, d, h, m)
 		elseif h > 0 then
-			return format( HOUR, h, m )
+			return format(HOUR, h, m)
 		else
-			return format( MIN, m )
+			return format(MIN, m)
 		end
 	end
 end
@@ -128,7 +128,7 @@ end
 
 local BuildSortedLists
 do
-	local function SortPlayers( a, b )
+	local function SortPlayers(a, b)
 		if a == currentPlayer then
 			return true
 		elseif b == currentPlayer then
@@ -137,7 +137,7 @@ do
 		return a < b
 	end
 
-	local function SortRealms( a, b )
+	local function SortRealms(a, b)
 		if a == currentRealm then
 			return true
 		elseif b == currentRealm then
@@ -147,43 +147,43 @@ do
 	end
 
 	function BuildSortedLists()
-		wipe( sortedRealms )
-		for realm in pairs( db ) do
-			if type( db[ realm ] ) == "table" then
-				table.insert( sortedRealms, realm )
-				sortedPlayers[ realm ] = wipe( sortedPlayers[ realm ] or {} )
-				for faction in pairs( db[ realm ] ) do
-					sortedPlayers[ realm ][ faction ] = wipe( sortedPlayers[ realm ][ faction ] or {} )
-					for name in pairs( db[ realm ][ faction ] ) do
-						table.insert( sortedPlayers[ realm ][ faction ], name )
+		wipe(sortedRealms)
+		for realm in pairs(db) do
+			if type(db[realm]) == "table" then
+				table.insert(sortedRealms, realm)
+				sortedPlayers[realm] = wipe(sortedPlayers[realm] or {})
+				for faction in pairs(db[realm]) do
+					sortedPlayers[realm][faction] = wipe(sortedPlayers[realm][faction] or {})
+					for name in pairs(db[realm][faction]) do
+						table.insert(sortedPlayers[realm][faction], name)
 					end
 					if realm == currentRealm and faction == currentFaction then
-						table.sort( sortedPlayers[ realm ][ faction ], SortPlayers )
+						table.sort(sortedPlayers[realm][faction], SortPlayers)
 					else
-						table.sort( sortedPlayers[ realm ][ faction ] )
+						table.sort(sortedPlayers[realm][faction])
 					end
 				end
 			end
 		end
-		table.sort( sortedRealms, SortRealms )
+		table.sort(sortedRealms, SortRealms)
 	end
 end
 
 ------------------------------------------------------------------------
 
-local BrokerPlayedTime = CreateFrame( "Frame" )
-BrokerPlayedTime:SetScript( "OnEvent", function( self, event, ... ) return self[ event ] and self[ event ] (self, ... ) end )
-BrokerPlayedTime:RegisterEvent( "PLAYER_LOGIN" )
+local BrokerPlayedTime = CreateFrame("Frame")
+BrokerPlayedTime:SetScript("OnEvent", function(self, event, ...) return self[event] and self[event] (self, ...) end)
+BrokerPlayedTime:RegisterEvent("PLAYER_LOGIN")
 
 function BrokerPlayedTime:PLAYER_LOGIN()
-	local function copyTable( src, dst )
-		if type( src ) ~= "table" then return {} end
-		if type( dst ) ~= "table" then dst = {} end
-		for k, v in pairs( src ) do
-			if type( v ) == "table" then
-				dst[ k ] = copyTable( v, dst[ k ] )
-			elseif type( v ) ~= type( dst[ k ] ) then
-				dst[ k ] = v
+	local function copyTable(src, dst)
+		if type(src) ~= "table" then return {} end
+		if type(dst) ~= "table" then dst = {} end
+		for k, v in pairs(src) do
+			if type(v) == "table" then
+				dst[k] = copyTable(v, dst[k])
+			elseif type(v) ~= type(dst[k]) then
+				dst[k] = v
 			end
 		end
 		return dst
@@ -193,11 +193,11 @@ function BrokerPlayedTime:PLAYER_LOGIN()
 		classIcons = false,
 		factionIcons = false,
 		levels = false,
-		[ currentRealm ] = {
-			[ currentFaction ] = {
-				[ currentPlayer ] = {
-					class = ( select( 2, UnitClass("player") ) ),
-					level = UnitLevel( "player" ),
+		[currentRealm] = {
+			[currentFaction] = {
+				[currentPlayer] = {
+					class = (select(2, UnitClass("player"))),
+					level = UnitLevel("player"),
 					timePlayed = 0,
 					timeUpdated = 0,
 				},
@@ -206,28 +206,28 @@ function BrokerPlayedTime:PLAYER_LOGIN()
 	}
 
 	BrokerPlayedTimeDB = BrokerPlayedTimeDB or {}
-	db = copyTable( defaults, BrokerPlayedTimeDB )
+	db = copyTable(defaults, BrokerPlayedTimeDB)
 
-	myDB = db[ currentRealm ][ currentFaction ][ currentPlayer ]
+	myDB = db[currentRealm][currentFaction][currentPlayer]
 
 	BuildSortedLists()
 
 	if CUSTOM_CLASS_COLORS then
 		local function UpdateClassColors()
-			for k, v in pairs( CUSTOM_CLASS_COLORS ) do
-				CLASS_COLORS[ k ] = format( "|cff%02x%02x%02x", v.r * 255, v.g * 255, v.b * 255 )
+			for k, v in pairs(CUSTOM_CLASS_COLORS) do
+				CLASS_COLORS[k] = format("|cff%02x%02x%02x", v.r * 255, v.g * 255, v.b * 255)
 			end
 		end
 		UpdateClassColors()
-		CUSTOM_CLASS_COLORS:RegisterCallback( UpdateClassColors )
+		CUSTOM_CLASS_COLORS:RegisterCallback(UpdateClassColors)
 	end
 
-	self:UnregisterEvent( "PLAYER_LOGIN" )
+	self:UnregisterEvent("PLAYER_LOGIN")
 
-	self:RegisterEvent( "PLAYER_LEVEL_UP" )
-	self:RegisterEvent( "PLAYER_REGEN_ENABLED" )
-	self:RegisterEvent( "PLAYER_UPDATE_RESTING" )
-	self:RegisterEvent( "TIME_PLAYED_MSG" )
+	self:RegisterEvent("PLAYER_LEVEL_UP")
+	self:RegisterEvent("PLAYER_REGEN_ENABLED")
+	self:RegisterEvent("PLAYER_UPDATE_RESTING")
+	self:RegisterEvent("TIME_PLAYED_MSG")
 
 	self:UpdateTimePlayed()
 end
@@ -235,12 +235,12 @@ end
 local requesting
 
 local o = ChatFrame_DisplayTimePlayed
-ChatFrame_DisplayTimePlayed = function( ... )
+ChatFrame_DisplayTimePlayed = function(...)
 	if requesting then
 		requesting = false
 		return
 	end
-	return o( ... )
+	return o(...)
 end
 
 function BrokerPlayedTime:UpdateTimePlayed()
@@ -255,14 +255,14 @@ function BrokerPlayedTime:SaveTimePlayed()
 end
 
 function BrokerPlayedTime:PLAYER_LEVEL_UP(level)
-	myDB.level = level or UnitLevel( "player" )
+	myDB.level = level or UnitLevel("player")
 	self:SaveTimePlayed()
 end
 
 BrokerPlayedTime.PLAYER_REGEN_ENABLED  = BrokerPlayedTime.SaveTimePlayed
 BrokerPlayedTime.PLAYER_UPDATE_RESTING = BrokerPlayedTime.SaveTimePlayed
 
-function BrokerPlayedTime:TIME_PLAYED_MSG( t )
+function BrokerPlayedTime:TIME_PLAYED_MSG(t)
 	timePlayed = t
 	timeUpdated = time()
 	self:SaveTimePlayed()
@@ -270,7 +270,7 @@ end
 
 ------------------------------------------------------------------------
 
-local BrokerPlayedTimeMenu = CreateFrame( "Frame", "BrokerPlayedTimeMenu", nil, "UIDropDownMenuTemplate" )
+local BrokerPlayedTimeMenu = CreateFrame("Frame", "BrokerPlayedTimeMenu", nil, "UIDropDownMenuTemplate")
 BrokerPlayedTimeMenu.displayMode = "MENU"
 BrokerPlayedTimeMenu.info = {}
 
@@ -285,48 +285,48 @@ BrokerPlayedTimeMenu.SetLevels = function() db.levels = not db.levels end
 
 BrokerPlayedTimeMenu.CloseDropDownMenus = function() CloseDropDownMenus() end
 
-BrokerPlayedTimeMenu.RemoveCharacter = function( button )
+BrokerPlayedTimeMenu.RemoveCharacter = function(button)
 	local value = button and button.value or UIDROPDOWNMENU_MENU_VALUE
-	local realm, faction, name = string.split( "#", value )
-	if realm and faction and name and db[ realm ] and db[ realm ][ faction ] and db[ realm ][ faction ][ name ] then
-		db[ realm ][ faction ][ name ] = nil
+	local realm, faction, name = string.split("#", value)
+	if realm and faction and name and db[realm] and db[realm][faction] and db[realm][faction][name] then
+		db[realm][faction][name] = nil
 
 		local nf = 0
-		for k in pairs( db[ realm ][ faction ] ) do
+		for k in pairs(db[realm][faction]) do
 			nf = nf + 1
 		end
 		if nf == 0 then
-			db[ realm ][ faction ] = nil
+			db[realm][faction] = nil
 		end
 
 		local nr = 0
-		for k in pairs( db[ realm ] ) do
+		for k in pairs(db[realm]) do
 			nr = nr + 1
 		end
 		if nr == 0 then
-			db[ realm ] = nil
-			sortedRealms[ realm ] = nil
+			db[realm] = nil
+			sortedRealms[realm] = nil
 		end
 
 		BuildSortedLists()
 	end
 end
 
-BrokerPlayedTimeMenu.initialize = function( self, level )
+BrokerPlayedTimeMenu.initialize = function(self, level)
 	if not level then return end
-	local info = wipe( self.info )
+	local info = wipe(self.info)
 	if level == 1 then
 		info.text = L["Played Time"]
 		info.isTitle = 1
 		info.notCheckable = 1
-		UIDropDownMenu_AddButton( info, level )
+		UIDropDownMenu_AddButton(info, level)
 
 		info.isTitle = nil
 
 		info.text = " "
 		info.disabled = 1
 		info.notCheckable = 1
-		UIDropDownMenu_AddButton( info, level )
+		UIDropDownMenu_AddButton(info, level)
 
 		info.disabled = nil
 		info.notCheckable = nil
@@ -337,17 +337,17 @@ BrokerPlayedTimeMenu.initialize = function( self, level )
 		info.text = L["Character levels"]
 		info.checked = self.GetLevels
 		info.func = self.SetLevels
-		UIDropDownMenu_AddButton( info, level )
+		UIDropDownMenu_AddButton(info, level)
 
 		info.text = L["Class icons"]
 		info.checked = self.GetClassIcons
 		info.func = self.SetClassIcons
-		UIDropDownMenu_AddButton( info, level )
+		UIDropDownMenu_AddButton(info, level)
 
 		info.text = L["Faction icons"]
 		info.checked = self.GetFactionIcons
 		info.func = self.SetFactionIcons
-		UIDropDownMenu_AddButton( info, level )
+		UIDropDownMenu_AddButton(info, level)
 
 		info.checked = nil
 		info.func = nil
@@ -356,14 +356,14 @@ BrokerPlayedTimeMenu.initialize = function( self, level )
 		info.text = " "
 		info.disabled = 1
 		info.notCheckable = 1
-		UIDropDownMenu_AddButton( info, level )
+		UIDropDownMenu_AddButton(info, level)
 
 		info.disabled = nil
 		info.notCheckable = 1
 
 		info.text = L["Remove character"]
 		info.hasArrow = 1
-		UIDropDownMenu_AddButton( info, level )
+		UIDropDownMenu_AddButton(info, level)
 
 		info.checked = nil
 		info.func = nil
@@ -371,7 +371,7 @@ BrokerPlayedTimeMenu.initialize = function( self, level )
 
 		info.text = " "
 		info.disabled = 1
-		UIDropDownMenu_AddButton( info, level )
+		UIDropDownMenu_AddButton(info, level)
 
 		info.disabled = nil
 		info.keepShownOnClick = nil
@@ -379,25 +379,25 @@ BrokerPlayedTimeMenu.initialize = function( self, level )
 		info.text = CLOSE
 		info.func = self.CloseDropDownMenus
 		info.notCheckable = 1
-		UIDropDownMenu_AddButton( info, level )
+		UIDropDownMenu_AddButton(info, level)
 	elseif level == 2 then
-		for _, realm in ipairs( sortedRealms ) do
+		for _, realm in ipairs(sortedRealms) do
 			info.text = realm
 			info.value = realm
 			info.hasArrow = 1
 			info.keepShownOnClick = 1
 			info.notCheckable = 1
-			UIDropDownMenu_AddButton( info, level )
+			UIDropDownMenu_AddButton(info, level)
 		end
 	elseif level == 3 then
 		local factions = 0
-		for i, faction in ipairs( sortedFactions ) do
+		for i, faction in ipairs(sortedFactions) do
 			info.value = nil
 			info.colorCode = nil
 			info.func = nil
 
 			local realm = UIDROPDOWNMENU_MENU_VALUE
-			local rfp = sortedPlayers[ realm ][ faction ]
+			local rfp = sortedPlayers[realm][faction]
 
 			if rfp then
 				factions = factions + 1
@@ -406,7 +406,7 @@ BrokerPlayedTimeMenu.initialize = function( self, level )
 					info.text = " "
 					info.disabled = 1
 					info.notCheckable = 1
-					UIDropDownMenu_AddButton( info, level )
+					UIDropDownMenu_AddButton(info, level)
 				end
 
 				info.disabled = nil
@@ -414,20 +414,20 @@ BrokerPlayedTimeMenu.initialize = function( self, level )
 				info.text = faction
 				info.isTitle = 1
 				info.notCheckable = 1
-				UIDropDownMenu_AddButton( info, level )
+				UIDropDownMenu_AddButton(info, level)
 
 				info.disabled = nil
 				info.isTitle = nil
 
-				for j, name in ipairs( rfp ) do
-					local cdata = db[ realm ][ faction ][ name ]
+				for j, name in ipairs(rfp) do
+					local cdata = db[realm][faction][name]
 
 					info.text = name
-					info.value = format( "%s#%s#%s", realm, faction, name )
-					info.colorCode = CLASS_COLORS[ cdata and cdata.class or "UNKNOWN" ]
-					info.disabled = ( name == currentPlayer and realm == currentRealm )
+					info.value = format("%s#%s#%s", realm, faction, name)
+					info.colorCode = CLASS_COLORS[cdata and cdata.class or "UNKNOWN"]
+					info.disabled = (name == currentPlayer and realm == currentRealm)
 					info.func = self.RemoveCharacter
-					UIDropDownMenu_AddButton( info, level )
+					UIDropDownMenu_AddButton(info, level)
 				end
 			end
 		end
@@ -436,19 +436,19 @@ end
 
 ------------------------------------------------------------------------
 
-local function OnTooltipShow( tooltip )
+local function OnTooltipShow(tooltip)
 	local total = 0
-	tooltip:AddLine( L["Time Played"] )
-	for _, realm in ipairs( sortedRealms ) do
+	tooltip:AddLine(L["Time Played"])
+	for _, realm in ipairs(sortedRealms) do
 		tooltip:AddLine(" ")
 		if #sortedRealms > 1 then
-			tooltip:AddLine( realm )
+			tooltip:AddLine(realm)
 		end
-		for _, faction in ipairs( sortedFactions ) do
-			local nfr = sortedPlayers[ realm ][ faction ]
+		for _, faction in ipairs(sortedFactions) do
+			local nfr = sortedPlayers[realm][faction]
 			if nfr and #nfr > 0 then
-				for _, name in ipairs( nfr ) do
-					local data = db[ realm ][ faction ][ name ]
+				for _, name in ipairs(nfr) do
+					local data = db[realm][faction][name]
 					if data then
 						local t
 						if realm == currentRealm and name == currentPlayer then
@@ -458,9 +458,9 @@ local function OnTooltipShow( tooltip )
 						end
 						if t > 0 then
 							if db.levels then
-								tooltip:AddDoubleLine( format("%s%s%s%s (%s)|r", db.factionIcons and factionIcons[ faction ] or "", db.classIcons and classIcons[ data.class ] or "", CLASS_COLORS[ data.class ] or GRAY, name, data.level ), FormatTime( t ) )
+								tooltip:AddDoubleLine(format("%s%s%s%s (%s)|r", db.factionIcons and factionIcons[faction] or "", db.classIcons and classIcons[data.class] or "", CLASS_COLORS[data.class] or GRAY, name, data.level), FormatTime(t))
 							else
-								tooltip:AddDoubleLine( format("%s%s%s%s|r", db.factionIcons and factionIcons[ faction ] or "", db.classIcons and classIcons[ data.class ] or "", CLASS_COLORS[ data.class ] or GRAY, name ), FormatTime( t ) )
+								tooltip:AddDoubleLine(format("%s%s%s%s|r", db.factionIcons and factionIcons[faction] or "", db.classIcons and classIcons[data.class] or "", CLASS_COLORS[data.class] or GRAY, name), FormatTime(t))
 							end
 							total = total + t
 						end
@@ -469,22 +469,22 @@ local function OnTooltipShow( tooltip )
 			end
 		end
 	end
-	tooltip:AddLine( " " )
-	tooltip:AddDoubleLine( L["Total"], FormatTime( total ) )
+	tooltip:AddLine("----------------------------------")
+	tooltip:AddDoubleLine(L["Total"], FormatTime(total))
 end
 
 ------------------------------------------------------------------------
 
-BrokerPlayedTime.dataObject = LibStub( "LibDataBroker-1.1" ):NewDataObject( "PlayedTime", {
+BrokerPlayedTime.dataObject = LibStub("LibDataBroker-1.1"):NewDataObject("PlayedTime", {
 	type = "data source",
 	icon = [[Interface\Icons\Spell_Nature_TimeStop]],
 	text = L["Time Played"],
 	OnTooltipShow = OnTooltipShow,
-	OnClick = function( self, button )
+	OnClick = function(self, button)
 		if button == "RightButton" then
-			ToggleDropDownMenu( 1, nil, BrokerPlayedTimeMenu, self, 0, 0 )
+			ToggleDropDownMenu(1, nil, BrokerPlayedTimeMenu, self, 0, 0)
 		end
 	end,
-} )
+})
 
 ------------------------------------------------------------------------
