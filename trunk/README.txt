@@ -1,37 +1,38 @@
 ﻿Broker_PlayedTime
 =================
 
-* Written by Phanx <addons@phanx.net>
-* Copyright © 2010–2011 Phanx.  Some rights reserved. See LICENSE.txt for details.
-* http://www.wowinterface.com/downloads/info-BrokerPlayedTime.html
+* Copyright (c) 2010–2012 Phanx <addons@phanx.net>. All rights reserved.
+* See the accompanying LICENSE file for more information.
+* http://www.wowinterface.com/downloads/info16711-BrokerPlayedTime.html
 * http://www.curse.com/addons/wow/broker-playedtime
 
 
 Description
 -----------
 
-Broker_PlayedTime is a DataBroker plugin to track your played time on
-all of your characters.
+Broker_PlayedTime is a DataBroker plugin to keep track of your played
+time on all of your characters.
 
-The tooltip lists all of your characters, on both factions, on all
-servers. The current character is listed first for quick reference.
-Character names are colored by class. Character levels, class icons,
-and faction icons are also available.
+Hover over the plugin to see each of your characters' played time, and
+your total played time. Character names are colored by class, and the
+character you're currently playing is listed first for quick reference.
 
-Right-click the plugin for options.
+Right-click on the plugin to enable or disable the display of character
+levels, class icons, and faction icons, or to remove a character from
+the list.
 
 
 Localization
 ------------
 
-Compatible with English, Deutsch, Español, Français, Português, Русский,
-한국어, 简体中文, and 正體中文 game clients.
+Compatible with English, Deutsch, Español, Français, Italiano, Português,
+Русский, 한국어, 简体中文, and 正體中文 game clients.
 
-Translated into English, Deutsch, Español, Français, Português, Русский,
-한국어, 简体中文, and 正體中文.
+Translated into English, Deutsch, Español, Français, Italiano, Português,
+Русский, 한국어, 简体中文, and 正體中文.
 
-For corrections or updates, send me a PM on either download site, or use
-the localization system on CurseForge:
+To add or update translations for any language, see the Localization tab
+on the CurseForge project page:
 
 http://wow.curseforge.com/addons/broker-playedtime/localization/
 
@@ -39,9 +40,15 @@ http://wow.curseforge.com/addons/broker-playedtime/localization/
 Feedback
 --------
 
-Please use the ticket system on either download site report bugs or
-request features. Use the comments section only for general questions
-or comments.
+Bugs, errors, or other problems:
+	Submit a bug report ticket on either download page.
 
-If you need to contact me privately, you may do by private message
-on either download site, or by email at <addons@phanx.net>.
+Feature requests or other suggestions:
+	Submit a feature request ticket system on either download page.
+
+General questions or comments:
+	Post a comment on either download page.
+
+If you need to contact me privately for a reason other than those listed
+above, you can send me a private message on either download site, or
+email me at <addons@phanx.net>.

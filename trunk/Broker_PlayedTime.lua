@@ -1,8 +1,8 @@
 --[[--------------------------------------------------------------------
 	Broker_PlayedTime
 	Tracks played time for all your characters.
-	Written by Phanx <addons@phanx.net>
-	Copyright © 2010–2011 Phanx. Some rights reserved. See LICENSE.txt for details.
+	Copyright © 2010–2012 Phanx <addons@phanx.net>. All rights reserved.
+	See the accompanying README and LICENSE files for more information.
 	http://www.wowinterface.com/downloads/info16711-BrokerPlayedTime.html
 	http://www.curse.com/addons/wow/broker-playedtime
 ----------------------------------------------------------------------]]
@@ -35,6 +35,12 @@ elseif LOCALE == "frFR" then
 	L["Class icons"] = "Icônes de classe"
 	L["Faction icons"] = "Icônes de faction"
 	L["Remove character"] = "Supprimer personnage"
+elseif LOCALE == "itIT" then
+	L["Total"] = "Totale"
+	L["Character levels"] = "Livelli di caratteri"
+	L["Class icons"] = "Icone di classi"
+	L["Faction icons"] = "Icone di fazioni"
+	L["Remove character"] = "Rimuovere il carattere"
 elseif LOCALE == "ptBR" then
 	L["Total"] = "Total"
 	L["Character levels"] = "Níveis de personagem"
