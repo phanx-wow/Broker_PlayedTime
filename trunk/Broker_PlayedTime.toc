@@ -1,5 +1,5 @@
-## Interface: 50001
-## Version: 5.0.1.wowi:revision-beta
+## Interface: 40300
+## Version: 4.3.4.wowi:revision
 
 ## Title: Broker: Played Time
 ## Notes: DataBroker plugin to track played time across all your characters.
