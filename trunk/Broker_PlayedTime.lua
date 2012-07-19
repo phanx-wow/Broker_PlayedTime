@@ -475,7 +475,7 @@ local function OnTooltipShow(tooltip)
 			end
 		end
 	end
-	tooltip:AddLine("----------------------------------")
+	tooltip:AddLine(" ")
 	tooltip:AddDoubleLine(L["Total"], FormatTime(total))
 end
 
