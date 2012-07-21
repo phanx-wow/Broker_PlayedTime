@@ -88,14 +88,14 @@ local currentRealm = GetRealmName()
 local MAX_LEVEL = MAX_PLAYER_LEVEL_TABLE[GetAccountExpansionLevel()]
 
 local factionIcons = {
-	Horde = [[|TInterface\AddOns\Broker_PlayedTime\Faction-Horde:0|t]],
-	Alliance = [[|TInterface\AddOns\Broker_PlayedTime\Faction-Alliance:0|t]],
+	Alliance = [[|TInterface\BattlefieldFrame\Battleground-Alliance:16:16:0:0:32:32:4:26:4:27|t ]],
+	Horde = [[|TInterface\BattlefieldFrame\Battleground-Horde:16:16:0:0:32:32:5:25:5:26|t ]],
 }
 
 local classIcons = {}
 for class, t in pairs(CLASS_BUTTONS) do
 	local offset, left, right, bottom, top = 0.025, unpack(t)
-	classIcons[class] = format([[|TInterface\Glues\CharacterCreate\UI-CharacterCreate-Classes:16:16:0:0:256:256:%s:%s:%s:%s|t]], (left + offset) * 256, (right - offset) * 256, (bottom + offset) * 256, (top - offset) * 256)
+	classIcons[class] = format([[|TInterface\Glues\CharacterCreate\UI-CharacterCreate-Classes:14:14:0:0:256:256:%s:%s:%s:%s|t ]], (left + offset) * 256, (right - offset) * 256, (bottom + offset) * 256, (top - offset) * 256)
 end
 
 local CLASS_COLORS = { UNKNOWN = "|cffcccccc" }
