@@ -75,7 +75,7 @@ end
 
 ------------------------------------------------------------------------
 
-local format = string.format
+local floor, format, gsub, ipairs, sort, tinsert, wipe = floor, format, gsub, ipairs, sort, tinsert, wipe
 
 local db, myDB
 local timePlayed, timeUpdated = 0, 0
@@ -112,7 +112,7 @@ do
 		if not t then return end
 
 		if not DAY then
-			local DAY_ABBR, HOUR_ABBR, MIN_ABBR = DAY_ONELETTER_ABBR:gsub("%%d", ""), HOUR_ONELETTER_ABBR:gsub("%%d", ""), MINUTE_ONELETTER_ABBR:gsub("%%d", "")
+			local DAY_ABBR, HOUR_ABBR, MIN_ABBR = gsub(DAY_ONELETTER_ABBR, "%%d", ""), gsub(HOUR_ONELETTER_ABBR, "%%d", ""), gsub(MINUTE_ONELETTER_ABBR, "%%d", "")
 			DAY = format("|cffffffff%s|r|cffffcc00%s|r |cffffffff%s|r|cffffcc00%s|r |cffffffff%s|r|cffffcc00%s|r", "%d", DAY_ABBR, "%02d", HOUR_ABBR, "%02d", MIN_ABBR)
 			HOUR = format("|cffffffff%s|r|cffffcc00%s|r |cffffffff%s|r|cffffcc00%s|r", "%d", HOUR_ABBR, "%02d", MIN_ABBR)
 			MIN = format("|cffffffff%s|r|cffffcc00%s|r", "%d", MIN_ABBR)
@@ -156,22 +156,22 @@ do
 		wipe(sortedRealms)
 		for realm in pairs(db) do
 			if type(db[realm]) == "table" then
-				table.insert(sortedRealms, realm)
+				tinsert(sortedRealms, realm)
 				sortedPlayers[realm] = wipe(sortedPlayers[realm] or {})
 				for faction in pairs(db[realm]) do
 					sortedPlayers[realm][faction] = wipe(sortedPlayers[realm][faction] or {})
 					for name in pairs(db[realm][faction]) do
-						table.insert(sortedPlayers[realm][faction], name)
+						tinsert(sortedPlayers[realm][faction], name)
 					end
 					if realm == currentRealm and faction == currentFaction then
-						table.sort(sortedPlayers[realm][faction], SortPlayers)
+						sort(sortedPlayers[realm][faction], SortPlayers)
 					else
-						table.sort(sortedPlayers[realm][faction])
+						sort(sortedPlayers[realm][faction])
 					end
 				end
 			end
 		end
-		table.sort(sortedRealms, SortRealms)
+		sort(sortedRealms, SortRealms)
 	end
 end
 
