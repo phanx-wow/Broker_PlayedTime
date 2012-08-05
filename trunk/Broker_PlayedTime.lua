@@ -75,7 +75,7 @@ end
 
 ------------------------------------------------------------------------
 
-local floor, format, gsub, ipairs, sort, tinsert, wipe = floor, format, gsub, ipairs, sort, tinsert, wipe
+local floor, format, gsub, ipairs, pairs, sort, tinsert, type, wipe = floor, format, gsub, ipairs, pairs, sort, tinsert, type, wipe
 
 local db, myDB
 local timePlayed, timeUpdated = 0, 0
