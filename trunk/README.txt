@@ -1,7 +1,7 @@
 ﻿Broker_PlayedTime
 =================
 
-* Copyright (c) 2010–2012 Phanx <addons@phanx.net>. All rights reserved.
+* Copyright (c) 2010-2013 Phanx <addons@phanx.net>. All rights reserved.
 * See the accompanying LICENSE file for more information.
 * http://www.wowinterface.com/downloads/info16711-BrokerPlayedTime.html
 * http://www.curse.com/addons/wow/broker-playedtime
