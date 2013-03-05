@@ -1,11 +1,12 @@
-## Interface: 50100
-## Version: 5.1.0.wowi:revision
+## Interface: 50200
+## Version: 5.2.0.wowi:revision
 
 ## Title: Broker: Played Time
 ## Notes: DataBroker plugin to track played time across all your characters.
 ## Notes-esES: Plugin de DataBroker para rastrear el tiempo jugado en todos sus personajes.
 ## Notes-esMX: Plugin de DataBroker para rastrear el tiempo jugado en todos sus personajes.
 ## Notes-ptBR: Plugin do DataBroker para rastrear o tempo jogado em todos os seus personagens.
+
 ## Author: Phanx
 ## X-Email: addons@phanx.net
 ## X-Copyright: Copyright (c) 2010-2013 Phanx. All rights reserved.
