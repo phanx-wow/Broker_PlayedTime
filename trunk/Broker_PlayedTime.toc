@@ -3,9 +3,14 @@
 
 ## Title: Broker: Played Time
 ## Notes: DataBroker plugin to track played time across all your characters.
-## Notes-esES: Plugin de DataBroker para rastrear el tiempo jugado en todos sus personajes.
-## Notes-esMX: Plugin de DataBroker para rastrear el tiempo jugado en todos sus personajes.
-## Notes-ptBR: Plugin do DataBroker para rastrear o tempo jogado em todos os seus personagens.
+## Title-esMX: Broker: Tiempo jugado
+## Notes-esES: Plugin DataBroker para seguir el tiempo jugado en todos los personajes.
+## Title-esES: Broker: Tiempo jugado
+## Notes-esMX: Plugin DataBroker para seguir el tiempo jugó en todos los personajes.
+## Title-ptBR: Broker: Tempo jogado
+## Notes-ptBR: Plugin DataBroker para seguir o tempo jogado em todos os personagens.
+## Title-ptPT: Broker: Tempo jogado
+## Notes-ptPT: Plugin DataBroker para seguir o tempo jogado em todos os personagens.
 
 ## Author: Phanx
 ## X-Email: addons@phanx.net
