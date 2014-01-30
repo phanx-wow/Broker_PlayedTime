@@ -419,10 +419,8 @@ BrokerPlayedTimeMenu.initialize = function(self, level)
 
 				info.text = faction
 				info.isTitle = 1
-				info.notCheckable = 1
 				UIDropDownMenu_AddButton(info, level)
 
-				info.disabled = nil
 				info.isTitle = nil
 
 				for j, name in ipairs(rfp) do
