@@ -1,7 +1,7 @@
 --[[--------------------------------------------------------------------
 	Broker_PlayedTime
 	Tracks played time for all your characters.
-	Copyright (c) 2010-2013 Phanx <addons@phanx.net>. All rights reserved.
+	Copyright (c) 2010-2014 Phanx <addons@phanx.net>. All rights reserved.
 	See the accompanying README and LICENSE files for more information.
 	http://www.wowinterface.com/downloads/info16711-BrokerPlayedTime.html
 	http://www.curse.com/addons/wow/broker-playedtime
@@ -315,6 +315,7 @@ BrokerPlayedTimeMenu.RemoveCharacter = function(button)
 		end
 
 		BuildSortedLists()
+		CloseDropDownMenus()
 	end
 end
 
@@ -401,6 +402,7 @@ BrokerPlayedTimeMenu.initialize = function(self, level)
 			info.value = nil
 			info.colorCode = nil
 			info.func = nil
+			info.keepShownOnClick = nil
 
 			local realm = UIDROPDOWNMENU_MENU_VALUE
 			local rfp = sortedPlayers[realm][faction]
