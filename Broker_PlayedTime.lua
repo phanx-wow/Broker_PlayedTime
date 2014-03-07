@@ -18,7 +18,7 @@ L["Time Played"] = TIME_PLAYED_MSG
 
 local LOCALE = GetLocale()
 if LOCALE == "deDE" then
-	L["Total"] = "Gesamt"
+	L["Total"] = "Summe"
 	L["Character levels"] = "Charakterstufen"
 	L["Class icons"] = "Klassensymbolen"
 	L["Faction icons"] = "Fraktionsymbolen"
