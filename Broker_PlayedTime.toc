@@ -1,5 +1,5 @@
 ## Interface: 50400
-## Version: 5.4.1.wowi:revision
+## Version: 5.4.7.wowi:revision
 
 ## Title: Broker: Played Time
 ## Title-deDE: Broker: Spielzeit
@@ -8,7 +8,7 @@
 ## Title-ptBR: Broker: Tempo jogado
 
 ## Notes: DataBroker plugin to track played time across all your characters.
-## Notes-deDE: DataBroker-Plugin, um die gesamte Spielzeit auf allen deinen Charaktere zu verfolgen.
+## Notes-deDE: DataBroker-Plugin, um die gesamte Spielzeit aller deinen Charaktere zu verfolgen.
 ## Notes-esES: Plugin DataBroker para seguir el tiempo jugado en todos los personajes.
 ## Notes-esMX: Plugin DataBroker para seguir el tiempo jugó en todos los personajes.
 ## Notes-ptBR: Plugin DataBroker para seguir o tempo jogado em todos os personagens.
