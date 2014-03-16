@@ -3,7 +3,7 @@
 
 * Copyright (c) 2010-2014 Phanx <addons@phanx.net>. All rights reserved.
 * See the accompanying LICENSE file for more information.
-* http://www.wowinterface.com/downloads/info16711-BrokerPlayedTime.html
+* http://www.wowinterface.com/downloads/info16711-BrokerPlayedTime
 * http://www.curse.com/addons/wow/broker-playedtime
 
 

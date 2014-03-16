@@ -107,25 +107,23 @@ end
 
 local FormatTime
 do
-	local DAY, MIN, HOUR
-	function FormatTime(t)
+	local DAY_ABBR, HOUR_ABBR, MIN_ABBR = gsub(DAY_ONELETTER_ABBR, "%%d%s*", ""), gsub(HOUR_ONELETTER_ABBR, "%%d%s*", ""), gsub(MINUTE_ONELETTER_ABBR, "%%d%s*", "")
+	local DHM = format("|cffffffff%s|r|cffffcc00%s|r |cffffffff%s|r|cffffcc00%s|r |cffffffff%s|r|cffffcc00%s|r", "%d", DAY_ABBR, "%02d", HOUR_ABBR, "%02d", MIN_ABBR)
+	local  DH = format("|cffffffff%s|r|cffffcc00%s|r |cffffffff%s|r|cffffcc00%s|r", "%d", DAY_ABBR, "%02d", HOUR_ABBR)
+	local  HM = format("|cffffffff%s|r|cffffcc00%s|r |cffffffff%s|r|cffffcc00%s|r", "%d", HOUR_ABBR, "%02d", MIN_ABBR)
+	local   H = format("|cffffffff%s|r|cffffcc00%s|r", "%d", HOUR_ABBR)
+	local   M = format("|cffffffff%s|r|cffffcc00%s|r", "%d", MIN_ABBR)
+
+	function FormatTime(t, noMinutes)
 		if not t then return end
 
-		if not DAY then
-			local DAY_ABBR, HOUR_ABBR, MIN_ABBR = gsub(DAY_ONELETTER_ABBR, "%%d", ""), gsub(HOUR_ONELETTER_ABBR, "%%d", ""), gsub(MINUTE_ONELETTER_ABBR, "%%d", "")
-			DAY = format("|cffffffff%s|r|cffffcc00%s|r |cffffffff%s|r|cffffcc00%s|r |cffffffff%s|r|cffffcc00%s|r", "%d", DAY_ABBR, "%02d", HOUR_ABBR, "%02d", MIN_ABBR)
-			HOUR = format("|cffffffff%s|r|cffffcc00%s|r |cffffffff%s|r|cffffcc00%s|r", "%d", HOUR_ABBR, "%02d", MIN_ABBR)
-			MIN = format("|cffffffff%s|r|cffffcc00%s|r", "%d", MIN_ABBR)
-		end
-
 		local d, h, m = floor(t / 86400), floor((t % 86400) / 3600), floor((t % 3600) / 60)
-
 		if d > 0 then
-			return format(DAY, d, h, m)
+			return noMinutes and format(DH, d, h) or format(DHM, d, h, m)
 		elseif h > 0 then
-			return format(HOUR, h, m)
+			return noMinutes and format(H, h) or format(HM, h, m)
 		else
-			return format(MIN, m)
+			return format(M, m)
 		end
 	end
 end
@@ -178,7 +176,7 @@ end
 ------------------------------------------------------------------------
 
 local BrokerPlayedTime = CreateFrame("Frame")
-BrokerPlayedTime:SetScript("OnEvent", function(self, event, ...) return self[event] and self[event] (self, ...) end)
+BrokerPlayedTime:SetScript("OnEvent", function(self, event, ...) return self[event] and self[event](self, ...) or self:SaveTimePlayed() end)
 BrokerPlayedTime:RegisterEvent("PLAYER_LOGIN")
 
 function BrokerPlayedTime:PLAYER_LOGIN()
@@ -231,6 +229,7 @@ function BrokerPlayedTime:PLAYER_LOGIN()
 	self:UnregisterEvent("PLAYER_LOGIN")
 
 	self:RegisterEvent("PLAYER_LEVEL_UP")
+	self:RegisterEvent("PLAYER_LOGOUT")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
 	self:RegisterEvent("PLAYER_UPDATE_RESTING")
 	self:RegisterEvent("TIME_PLAYED_MSG")
@@ -258,15 +257,15 @@ function BrokerPlayedTime:SaveTimePlayed()
 	local now = time()
 	myDB.timePlayed = timePlayed + now - timeUpdated
 	myDB.timeUpdated = now
+
+	self:UpdateText()
+	self:SetUpdateInterval(timePlayed < 3600)
 end
 
 function BrokerPlayedTime:PLAYER_LEVEL_UP(level)
 	myDB.level = level or UnitLevel("player")
 	self:SaveTimePlayed()
 end
-
-BrokerPlayedTime.PLAYER_REGEN_ENABLED  = BrokerPlayedTime.SaveTimePlayed
-BrokerPlayedTime.PLAYER_UPDATE_RESTING = BrokerPlayedTime.SaveTimePlayed
 
 function BrokerPlayedTime:TIME_PLAYED_MSG(t)
 	timePlayed = t
@@ -481,10 +480,11 @@ end
 
 ------------------------------------------------------------------------
 
-BrokerPlayedTime.dataObject = LibStub("LibDataBroker-1.1"):NewDataObject("PlayedTime", {
-	type = "data source",
-	icon = [[Interface\Icons\Spell_Nature_TimeStop]],
-	text = L["Time Played"],
+BrokerPlayedTime.dataObject = LibStub("LibDataBroker-1.1"):NewDataObject(L["Time Played"], {
+	type  = "data source",
+	icon  = [[Interface\Icons\Spell_Nature_TimeStop]],
+	label = L["Time Played"],
+	text  = UNKNOWN,
 	OnTooltipShow = OnTooltipShow,
 	OnClick = function(self, button)
 		if button == "RightButton" then
@@ -492,5 +492,25 @@ BrokerPlayedTime.dataObject = LibStub("LibDataBroker-1.1"):NewDataObject("Played
 		end
 	end,
 })
+
+function BrokerPlayedTime:UpdateText()
+	local t = myDB.timePlayed + time() - myDB.timeUpdated
+	self.dataObject.text = FormatTime(floor(t / 3600) * 3600, true)
+end
+
+do
+	local t = BrokerPlayedTime:CreateAnimationGroup()
+	local a = t:CreateAnimation()
+	a:SetDuration(300)
+	t:SetScript("OnFinished", function(self, requested)
+		BrokerPlayedTime:UpdateText()
+		self:Play()
+	end)
+	function BrokerPlayedTime:SetUpdateInterval(fast)
+		t:Stop()
+		a:SetDuration(fast and 30 or 300)
+		t:Play()
+	end
+end
 
 ------------------------------------------------------------------------
