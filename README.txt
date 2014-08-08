@@ -26,10 +26,10 @@ Localization
 ------------
 
 Compatible with English, Deutsch, Español, Français, Italiano, Português,
-Русский, 한국어, 简体中文, and 繁體中文 game clients.
+Русский, 한국어, 简体中文 and 繁體中文 game clients.
 
 Translated into English, Deutsch, Español, Français, Italiano, Português,
-Русский, 한국어, 简体中文, and 繁體中文.
+Русский, 한국어, 简体中文 and 繁體中文.
 
 To add or update translations for any language, see the Localization tab
 on the CurseForge project page:
@@ -38,17 +38,22 @@ http://wow.curseforge.com/addons/broker-playedtime/localization/
 
 
 Feedback
---------
+-----------
 
-Bugs, errors, or other problems:
-	Submit a bug report ticket on either download page.
+Post a ticket on either download site, or a comment on WoWInterface.
 
-Feature requests or other suggestions:
-	Submit a feature request ticket system on either download page.
+If you are reporting a bug, please include directions I can follow to
+reproduce the bug, whether it still happens when all other addons are
+disabled, and the exact text of the related error message (if any) from 
+[BugSack](http://www.wowinterface.com/downloads/info5995-BugSack.html).
 
-General questions or comments:
-	Post a comment on either download page.
+If you need to contact me privately, you can send me a private message
+on either download site, or email me at <addons@phanx.net>.
 
-If you need to contact me privately for a reason other than those listed
-above, you can send me a private message on either download site, or
-email me at <addons@phanx.net>.
+
+License
+----------
+
+Copyright (c) 2010-2014 Phanx <addons@phanx.net>. All rights reserved.
+See the accompanying LICENSE file for information about the conditions
+under which redistribution and modification may be allowed.
