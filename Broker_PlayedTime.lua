@@ -20,8 +20,8 @@ local LOCALE = GetLocale()
 if LOCALE == "deDE" then
 	L["Total"] = "Summe"
 	L["Character levels"] = "Charakterstufen"
-	L["Class icons"] = "Klassensymbolen"
-	L["Faction icons"] = "Fraktionsymbolen"
+	L["Class icons"] = "Klassensymbole"
+	L["Faction icons"] = "Fraktionsymbole"
 	L["Remove character"] = "Charakter entfernen"
 elseif LOCALE == "esES" or LOCALE == "esMX" then
 	L["Total"] = "Total"
@@ -483,7 +483,6 @@ end
 BrokerPlayedTime.dataObject = LibStub("LibDataBroker-1.1"):NewDataObject(L["Time Played"], {
 	type  = "data source",
 	icon  = [[Interface\Icons\Spell_Nature_TimeStop]],
-	label = L["Time Played"],
 	text  = UNKNOWN,
 	OnTooltipShow = OnTooltipShow,
 	OnClick = function(self, button)
