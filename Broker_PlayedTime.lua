@@ -1,10 +1,10 @@
 --[[--------------------------------------------------------------------
 	Broker_PlayedTime
-	Tracks played time for all your characters.
+	DataBroker plugin to track played time across all your characters.
 	Copyright (c) 2010-2014 Phanx <addons@phanx.net>. All rights reserved.
-	See the accompanying README and LICENSE files for more information.
 	http://www.wowinterface.com/downloads/info16711-BrokerPlayedTime.html
 	http://www.curse.com/addons/wow/broker-playedtime
+	https://github.com/Phanx/Broker_PlayedTime
 ----------------------------------------------------------------------]]
 
 local L = setmetatable({}, { __index = function(t, k)
