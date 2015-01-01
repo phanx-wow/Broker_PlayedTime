@@ -1,5 +1,5 @@
 ## Interface: 60000
-## Version: 6.0.2.67
+## Version: @project-version@
 
 ## Title: Broker: Played Time
 ## Title-deDE: Broker: Zeit gespielt
