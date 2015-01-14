@@ -7,73 +7,7 @@
 	https://github.com/Phanx/Broker_PlayedTime
 ----------------------------------------------------------------------]]
 
-local L = setmetatable({}, { __index = function(t, k)
-	if k == nil then return "" end
-	local v = tostring(k)
-	t[k] = v
-	return v
-end})
-
-L["Time Played"] = TIME_PLAYED_MSG
-
-local LOCALE = GetLocale()
-if LOCALE == "deDE" then
-	L["Total"] = "Summe"
-	L["Character levels"] = "Charakterstufen"
-	L["Class icons"] = "Klassensymbole"
-	L["Faction icons"] = "Fraktionsymbole"
-	L["Remove character"] = "Charakter entfernen"
-elseif LOCALE == "esES" or LOCALE == "esMX" then
-	L["Total"] = "Total"
-	L["Character levels"] = "Niveles de personajes"
-	L["Class icons"] = "Iconos de clase"
-	L["Faction icons"] = "Iconos de facción"
-	L["Remove character"] = "Eliminar personaje"
-elseif LOCALE == "frFR" then
-	L["Total"] = "Total"
-	L["Character levels"] = "Niveaux de personnages"
-	L["Class icons"] = "Icônes de classe"
-	L["Faction icons"] = "Icônes de faction"
-	L["Remove character"] = "Supprimer personnage"
-elseif LOCALE == "itIT" then
-	L["Total"] = "Totale"
-	L["Character levels"] = "Livelli di caratteri"
-	L["Class icons"] = "Icone di classi"
-	L["Faction icons"] = "Icone di fazioni"
-	L["Remove character"] = "Rimuovere il carattere"
-elseif LOCALE == "ptBR" then
-	L["Total"] = "Total"
-	L["Character levels"] = "Níveis de personagem"
-	L["Class icons"] = "Ícones da classe"
-	L["Faction icons"] = "Ícones da facção"
-	L["Remove character"] = "Remover o personagem"
-elseif LOCALE == "ruRU" then -- Last updated 2011-03-01 by YOti @ CurseForge
-	L["Total"] = "Общее"
-	L["Character levels"] = "Уровни персонажей"
-	L["Class icons"] = "Значки классов"
-	L["Faction icons"] = "Значки фракций"
-	L["Remove character"] = "Удалить персонаж"
-elseif LOCALE == "koKR" then
-	L["Total"] = "전체"
-	L["Character levels"] = "캐릭터 레벨"
-	L["Class icons"] = "직업 아이콘"
-	L["Faction icons"] = "진영 아이콘"
-	L["Remove character"] = "캐릭터 삭제"
-elseif LOCALE == "zhCN" then
-	L["Total"] = "总游戏时间"
-	L["Character levels"] = "角色等级"
-	L["Class icons"] = "职业图标"
-	L["Faction icons"] = "阵营图标"
-	L["Remove character"] = "移除角色"
-elseif LOCALE == "zhTW" then
-	L["Total"] = "總遊戲時間"
-	L["Character levels"] = "角色等級"
-	L["Class icons"] = "職業圖示"
-	L["Faction icons"] = "陣營圖示"
-	L["Remove character"] = "移除角色"
-end
-
-------------------------------------------------------------------------
+local ADDON, L = ...
 
 local floor, format, gsub, ipairs, pairs, sort, tinsert, type, wipe = floor, format, gsub, ipairs, pairs, sort, tinsert, type, wipe
 
@@ -498,17 +432,17 @@ function BrokerPlayedTime:UpdateText()
 end
 
 do
-	local t = BrokerPlayedTime:CreateAnimationGroup()
-	local a = t:CreateAnimation()
-	a:SetDuration(300)
-	t:SetScript("OnFinished", function(self, requested)
+	local t
+	local function UpdateText()
 		BrokerPlayedTime:UpdateText()
-		self:Play()
-	end)
+		C_Timer.After(t, UpdateText)
+	end
 	function BrokerPlayedTime:SetUpdateInterval(fast)
-		t:Stop()
-		a:SetDuration(fast and 30 or 300)
-		t:Play()
+		local o = t
+		t = fast and 30 or 300
+		if not o then
+			C_Timer.After(t, UpdateText)
+		end
 	end
 end
 
