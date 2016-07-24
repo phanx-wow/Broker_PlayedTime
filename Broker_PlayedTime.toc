@@ -1,4 +1,4 @@
-## Interface: 60000
+## Interface: 70000
 ## Version: @project-version@
 
 ## Title: Broker: Played Time
@@ -15,7 +15,7 @@
 
 ## Author: Phanx
 ## X-Email: addons@phanx.net
-## X-Copyright: Copyright (c) 2010-2015 Phanx. All rights reserved.
+## X-Copyright: Copyright (c) 2010-2016 Phanx. All rights reserved.
 ## X-Website: https://github.com/Phanx/Broker_PlayedTime
 
 ## SavedVariables: BrokerPlayedTimeDB

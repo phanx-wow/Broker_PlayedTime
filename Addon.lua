@@ -1,7 +1,7 @@
 --[[--------------------------------------------------------------------
 	Broker_PlayedTime
 	DataBroker plugin to track played time across all your characters.
-	Copyright (c) 2010-2014 Phanx <addons@phanx.net>. All rights reserved.
+	Copyright (c) 2010-2016 Phanx <addons@phanx.net>. All rights reserved.
 	http://www.wowinterface.com/downloads/info16711-BrokerPlayedTime.html
 	http://www.curse.com/addons/wow/broker-playedtime
 	https://github.com/Phanx/Broker_PlayedTime
@@ -27,7 +27,7 @@ local factionIcons = {
 }
 
 local classIcons = {}
-for class, t in pairs(CLASS_BUTTONS) do
+for class, t in pairs(CLASS_ICON_TCOORDS) do
 	local offset, left, right, bottom, top = 0.025, unpack(t)
 	classIcons[class] = format([[|TInterface\Glues\CharacterCreate\UI-CharacterCreate-Classes:14:14:0:0:256:256:%s:%s:%s:%s|t ]], (left + offset) * 256, (right - offset) * 256, (bottom + offset) * 256, (top - offset) * 256)
 end
