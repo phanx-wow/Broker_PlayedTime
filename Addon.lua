@@ -87,7 +87,7 @@ do
 	function BuildSortedLists()
 		wipe(sortedRealms)
 		for realm in pairs(db) do
-			if type(db[realm]) == "table" then
+			if type(db[realm]) == "table" and (realm == currentRealm or not db.onlyCurrentRealm) then
 				tinsert(sortedRealms, realm)
 				sortedPlayers[realm] = wipe(sortedPlayers[realm] or {})
 				for faction in pairs(db[realm]) do
@@ -131,6 +131,7 @@ function BrokerPlayedTime:PLAYER_LOGIN()
 		classIcons = false,
 		factionIcons = false,
 		levels = false,
+		onlyCurrentRealm = false,
 		[currentRealm] = {
 			[currentFaction] = {
 				[currentPlayer] = {
@@ -222,6 +223,12 @@ BrokerPlayedTimeMenu.SetFactionIcons = function() db.factionIcons = not db.facti
 BrokerPlayedTimeMenu.GetLevels = function() return db.levels end
 BrokerPlayedTimeMenu.SetLevels = function() db.levels = not db.levels end
 
+BrokerPlayedTimeMenu.GetHideOtherRealms = function() return db.onlyCurrentRealm end
+BrokerPlayedTimeMenu.SetHideOtherRealms = function()
+	db.onlyCurrentRealm = not db.onlyCurrentRealm
+	BuildSortedLists()
+end
+
 BrokerPlayedTimeMenu.CloseDropDownMenus = function() CloseDropDownMenus() end
 
 BrokerPlayedTimeMenu.RemoveCharacter = function(button)
@@ -260,61 +267,66 @@ BrokerPlayedTimeMenu.initialize = function(self, level)
 		info.isTitle = 1
 		info.notCheckable = 1
 		UIDropDownMenu_AddButton(info, level)
-
-		info.isTitle = nil
+		wipe(self.info)
 
 		info.text = " "
 		info.disabled = 1
 		info.notCheckable = 1
 		UIDropDownMenu_AddButton(info, level)
-
-		info.disabled = nil
-		info.notCheckable = nil
-
-		info.keepShownOnClick = 1
-		info.isNotRadio = true
+		wipe(self.info)
 
 		info.text = L["Character levels"]
 		info.checked = self.GetLevels
 		info.func = self.SetLevels
+		info.keepShownOnClick = 1
 		UIDropDownMenu_AddButton(info, level)
+		wipe(self.info)
 
 		info.text = L["Class icons"]
 		info.checked = self.GetClassIcons
 		info.func = self.SetClassIcons
+		info.keepShownOnClick = 1
 		UIDropDownMenu_AddButton(info, level)
+		wipe(self.info)
 
 		info.text = L["Faction icons"]
+		info.keepShownOnClick = 1
 		info.checked = self.GetFactionIcons
 		info.func = self.SetFactionIcons
 		UIDropDownMenu_AddButton(info, level)
-
-		info.checked = nil
-		info.func = nil
-		info.isNotRadio = nil
+		wipe(self.info)
 
 		info.text = " "
 		info.disabled = 1
 		info.notCheckable = 1
 		UIDropDownMenu_AddButton(info, level)
+		wipe(self.info)
 
-		info.disabled = nil
+		info.text = L["Current realm only"]
+		info.keepShownOnClick = 1
+		info.checked = self.GetHideOtherRealms
+		info.func = self.SetHideOtherRealms
+		UIDropDownMenu_AddButton(info, level)
+		wipe(self.info)
+
+		info.text = " "
+		info.disabled = 1
 		info.notCheckable = 1
+		UIDropDownMenu_AddButton(info, level)
+		wipe(self.info)
 
 		info.text = L["Remove character"]
 		info.hasArrow = 1
+		info.keepShownOnClick = 1
+		info.notCheckable = 1
 		UIDropDownMenu_AddButton(info, level)
-
-		info.checked = nil
-		info.func = nil
-		info.hasArrow = nil
+		wipe(self.info)
 
 		info.text = " "
 		info.disabled = 1
+		info.notCheckable = 1
 		UIDropDownMenu_AddButton(info, level)
-
-		info.disabled = nil
-		info.keepShownOnClick = nil
+		wipe(self.info)
 
 		info.text = CLOSE
 		info.func = self.CloseDropDownMenus
@@ -415,20 +427,23 @@ end
 ------------------------------------------------------------------------
 
 BrokerPlayedTime.dataObject = LibStub("LibDataBroker-1.1"):NewDataObject(L["Time Played"], {
-	type  = "data source",
-	icon  = [[Interface\Icons\Spell_Nature_TimeStop]],
-	text  = UNKNOWN,
+	type = "data source",
+	icon = [[Interface\Icons\Spell_Nature_TimeStop]],
+	text = UNKNOWN,
 	OnTooltipShow = OnTooltipShow,
 	OnClick = function(self, button)
 		if button == "RightButton" then
-			ToggleDropDownMenu(1, nil, BrokerPlayedTimeMenu, self, 0, 0)
+			ToggleDropDownMenu(1, nil, BrokerPlayedTimeMenu, self, 0, 0, nil, nil, 15)
+			if BrokerPlayedTimeMenu ~= UIDROPDOWNMENU_OPEN_MENU then
+				self:GetScript("OnEnter")(self)
+			end
 		end
 	end,
 })
 
 function BrokerPlayedTime:UpdateText()
 	local t = myDB.timePlayed + time() - myDB.timeUpdated
-	self.dataObject.text = FormatTime(floor(t / 3600) * 3600, true)
+	self.dataObject.text = FormatTime(t, t > 3600)
 end
 
 do

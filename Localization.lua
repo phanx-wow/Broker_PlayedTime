@@ -33,6 +33,7 @@ if CURRENT_LOCALE == "deDE" then
 
 L["Character levels"] = "Charakterstufen"
 L["Class icons"] = "Klassensymbolen"
+L["Current realm only"] = "Nur das aktuelle Realm"
 L["Faction icons"] = "Fraktionsymbolen"
 L["Remove character"] = "Charakter entfernen"
 L["Total"] = "Gesamt"
@@ -47,6 +48,7 @@ if CURRENT_LOCALE == "esES" then
 
 L["Character levels"] = "Niveles de personajes"
 L["Class icons"] = "Iconos de clase"
+L["Current realm only"] = "Sólo el reino actual"
 L["Faction icons"] = "Iconos de facción"
 L["Remove character"] = "Eliminar personaje"
 
@@ -60,6 +62,7 @@ if CURRENT_LOCALE == "esMX" then
 
 L["Character levels"] = "Niveles de personajes"
 L["Class icons"] = "Iconos de clase"
+L["Current realm only"] = "Sólo el reino actual"
 L["Faction icons"] = "Iconos de facción"
 L["Remove character"] = "Eliminar personaje"
 
@@ -73,6 +76,7 @@ if CURRENT_LOCALE == "frFR" then
 
 L["Character levels"] = "Niveaux de personnages"
 L["Class icons"] = "Icônes de classe"
+L["Current realm only"] = "Royaume actuel uniquement"
 L["Faction icons"] = "Icônes de faction"
 L["Remove character"] = "Supprimer personnage"
 
@@ -86,6 +90,7 @@ if CURRENT_LOCALE == "itIT" then
 
 L["Character levels"] = "Livelli di caratteri"
 L["Class icons"] = "Icone di classi"
+L["Current realm only"] = "Solo il reame corrente"
 L["Faction icons"] = "Icone di fazioni"
 L["Remove character"] = "Rimuovere il carattere"
 L["Total"] = "Totale"
@@ -100,6 +105,7 @@ if CURRENT_LOCALE == "ptBR" then
 
 L["Character levels"] = "Níveis de personagem"
 L["Class icons"] = "Ícones da classe"
+L["Current realm only"] = "Só o reino atual"
 L["Faction icons"] = "Ícones da facção"
 L["Remove character"] = "Remover o personagem"
 

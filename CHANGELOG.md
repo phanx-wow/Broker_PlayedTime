@@ -1,3 +1,8 @@
+### Version 7.0.3.1
+
+* Added an option to hide other realms in the tooltip
+* Fixed the Broker text for characters with less than 1 hour played
+
 ### Version 7.0.3.0
 
 * Updated for WoW 7.0
