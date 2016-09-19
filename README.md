@@ -6,5 +6,5 @@ Broker: Played Time
 **ES** — Plugin DataBroker para seguir el tiempo jugado en todos los personajes.  
 **PT** — Plugin DataBroker para seguir o tempo jogado em todos os personagens.
 
-* [Download from Curse](http://www.curse.com/addons/wow/broker-playedtime)
+* [Download from Curse](https://mods.curse.com/addons/wow/broker-playedtime)
 * [Download from WoWInterface](http://www.wowinterface.com/downloads/info16711-BrokerPlayedTime.html)

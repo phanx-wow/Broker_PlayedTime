@@ -3,7 +3,7 @@
 	DataBroker plugin to track played time across all your characters.
 	Copyright (c) 2010-2016 Phanx <addons@phanx.net>. All rights reserved.
 	http://www.wowinterface.com/downloads/info16711-BrokerPlayedTime.html
-	http://www.curse.com/addons/wow/broker-playedtime
+	https://mods.curse.com/addons/wow/broker-playedtime
 	https://github.com/Phanx/Broker_PlayedTime
 ----------------------------------------------------------------------]]
 
