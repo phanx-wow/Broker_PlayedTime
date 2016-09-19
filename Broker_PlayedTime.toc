@@ -2,11 +2,6 @@
 ## Version: @project-version@
 
 ## Title: Broker: Played Time
-## Title-deDE: Broker: Zeit gespielt
-## Title-esMX: Broker: Tiempo jugado
-## Title-esES: Broker: Tiempo jugado
-## Title-ptBR: Broker: Tempo jogado
-
 ## Notes: DataBroker plugin to track played time across all your characters.
 ## Notes-deDE: DataBroker-Plugin, um die gesamt gespielte Zeit deiner Charaktere zu verfolgen.
 ## Notes-esES: Plugin DataBroker para seguir el tiempo jugado en todos los personajes.
