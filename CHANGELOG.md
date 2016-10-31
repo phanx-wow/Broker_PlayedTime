@@ -1,3 +1,7 @@
+### Version 7.1.0.0
+
+* Updated for WoW 7.1
+
 ### Version 7.0.3.1
 
 * Added an option to hide other realms in the tooltip
