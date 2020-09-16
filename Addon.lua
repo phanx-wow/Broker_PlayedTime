@@ -19,8 +19,6 @@ local currentFaction = UnitFactionGroup("player")
 local currentPlayer = UnitName("player")
 local currentRealm = GetRealmName()
 
-local MAX_LEVEL = MAX_PLAYER_LEVEL_TABLE[GetAccountExpansionLevel()]
-
 local factionIcons = {
 	Alliance = [[|TInterface\BattlefieldFrame\Battleground-Alliance:16:16:0:0:32:32:4:26:4:27|t ]],
 	Horde = [[|TInterface\BattlefieldFrame\Battleground-Horde:16:16:0:0:32:32:5:25:5:26|t ]],
@@ -109,6 +107,201 @@ end
 
 ------------------------------------------------------------------------
 
+-- https://de.wowhead.com/guides/shadowlands-leveling-changes-level-squish
+local squishTable = {
+	 1, --   1
+
+	 2, --   2
+	 2, --   3
+	 2, --   4
+
+	 3, --   5
+	 3, --   6
+	 3, --   7
+
+	 4, --   8
+	 4, --   9
+
+	 5, --  10
+	 5, --  11
+
+	 6, --  12
+	 6, --  13
+
+	 7, --  14
+	 7, --  15
+
+	 8, --  16
+	 8, --  17
+
+	 9, --  18
+	 9, --  19
+
+	10, --  20
+	10, --  21
+	10, --  22
+
+	11, --  23
+	11, --  24
+	11, --  25
+
+	12, --  26
+	12, --  27
+	12, --  28
+
+	13, --  29
+	13, --  30
+	13, --  31
+
+	14, --  32
+	14, --  33
+	14, --  34
+
+	15, --  35
+	15, --  36
+
+	16, --  37
+	16, --  38
+
+	17, --  39
+	17, --  40
+
+	18, --  41
+	18, --  42
+
+	19, --  43
+	19, --  44
+
+	20, --  45
+	20, --  46
+	20, --  47
+
+	21, --  48
+	21, --  49
+	21, --  50
+
+	22, --  51
+	22, --  52
+	22, --  53
+
+	23, --  54
+	23, --  55
+	23, --  56
+
+	24, --  57
+	24, --  58
+	24, --  59
+
+	25, --  60
+	25, --  61
+	25, --  62
+	25, --  63
+
+	26, --  64
+	26, --  65
+	26, --  66
+	26, --  67
+
+	27, --  68
+	27, --  69
+	27, --  70
+	27, --  71
+
+	28, --  72
+	28, --  73
+	28, --  74
+	28, --  75
+
+	29, --  76
+	29, --  77
+	29, --  78
+	29, --  79
+
+	30, --  80
+	30, --  81
+
+	31, --  82
+	31, --  83
+
+	32, --  84
+	32, --  85
+
+	33, --  86
+	33, --  87
+
+	34, --  88
+	34, --  89
+
+	35, --  90
+	35, --  91
+
+	36, --  92
+	36, --  93
+
+	37, --  94
+	37, --  95
+
+	38, --  96
+	38, --  97
+
+	39, --  98
+	39, --  99
+
+	40, -- 100
+	40, -- 101
+
+	41, -- 102
+	41, -- 103
+
+	42, -- 104
+	42, -- 105
+
+	43, -- 106
+	43, -- 107
+
+	44, -- 108
+	44, -- 109
+
+	45, -- 110
+	45, -- 111
+
+	46, -- 112
+	46, -- 113
+
+	47, -- 114
+	47, -- 115
+
+	48, -- 116
+	48, -- 117
+
+	49, -- 118
+	49, -- 119
+
+	50, -- 120
+}
+
+
+
+local function PerformLevelSquish()
+
+	-- Only once for game clients after Shadowlands.
+	if db.performedLevelSquish or select(4, GetBuildInfo()) < 90000 then return end
+
+	for realm in pairs(db) do
+		if type(db[realm]) == "table" then
+			for faction in pairs(db[realm]) do
+				for name in pairs(db[realm][faction]) do
+					db[realm][faction][name].level = squishTable[db[realm][faction][name].level]
+				end
+			end
+		end
+	end
+
+	db.performedLevelSquish = true
+
+end
+------------------------------------------------------------------------
+
 local BrokerPlayedTime = CreateFrame("Frame")
 BrokerPlayedTime:SetScript("OnEvent", function(self, event, ...) return self[event] and self[event](self, ...) or self:SaveTimePlayed() end)
 BrokerPlayedTime:RegisterEvent("PLAYER_LOGIN")
@@ -149,6 +342,10 @@ function BrokerPlayedTime:PLAYER_LOGIN()
 
 	myDB = db[currentRealm][currentFaction][currentPlayer]
 
+
+	PerformLevelSquish()
+
+
 	BuildSortedLists()
 
 	if CUSTOM_CLASS_COLORS then
@@ -168,6 +365,9 @@ function BrokerPlayedTime:PLAYER_LOGIN()
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
 	self:RegisterEvent("PLAYER_UPDATE_RESTING")
 	self:RegisterEvent("TIME_PLAYED_MSG")
+
+	-- Needed for level boost (no PLAYER_LEVEL_UP event).
+	myDB.level = UnitLevel("player")
 
 	self:UpdateTimePlayed()
 end
